@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
+=======
+  <component name="DiscordProjectSettings">
+    <option name="show" value="true" />
+  </component>
+>>>>>>> New tile texture
   <component name="ProjectNotificationSettings">
     <option name="askShowProject" value="false" />
   </component>

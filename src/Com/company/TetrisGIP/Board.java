@@ -1,0 +1,197 @@
+package Com.company.TetrisGIP;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+public class Board extends JPanel implements KeyListener {
+
+    //set the size of the blocks
+    private final int blockSize = 30;
+    //playing area size
+    private final int boardWidth = 10, boardheight = 20;
+    //enables images to load in the project
+    private BufferedImage blocks;
+    // define matrix using 2D Arrays
+    private int[][] board = new int[boardWidth][boardheight];
+
+    //Array for all the blocks
+    //1 in matrix stands for a block
+    //0 in matrix stands for empty space
+    private Blocks[] tetrisblocks = new Blocks[7];
+
+    //defines current tetrisblock that the user is paying with;
+    private Blocks curentTetrisblock;
+
+
+    private Timer timer;
+    //game is run at 60 frames per second as defined here
+    private int fps = 60;
+    private int delay = 1000 / fps;
+
+    // constructor for Board class
+    public Board() {
+        //initialize blocks
+        try {
+            blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //  Repaints the background back to white when there is no block
+        timer = new Timer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                update();
+                repaint();
+            }
+        });
+
+        timer.start();
+
+        /**
+         * INFO FOR SUBIMAGE USE
+         *
+         * Returns a subimage defined by a specified rectangular region.
+         * The returned {@code BufferedImage} shares the same
+         * data array as the original image.
+         * @param x the X coordinate of the upper-left corner of the
+         *          specified rectangular region
+         * @param y the Y coordinate of the upper-left corner of the
+         *          specified rectangular region
+         * @param w the width of the specified rectangular region
+         * @param h the height of the specified rectangular region
+         * @return a {@code BufferedImage} that is the subimage of this
+         *          {@code BufferedImage}.
+         * */
+
+        //  initializes the tetrisblocks
+        tetrisblocks[0] = new Blocks(blocks.getSubimage(0, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1, 1}// Straight-piece
+        }, this);
+
+        tetrisblocks[1] = new Blocks(blocks.getSubimage(blockSize, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 0},
+                {0, 1, 1}// Z-piece
+        }, this);
+
+        tetrisblocks[2] = new Blocks(blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), new int[][]{
+                {0, 1, 1},
+                {1, 1, 0}// S-piece
+        }, this);
+
+        tetrisblocks[3] = new Blocks(blocks.getSubimage(blockSize * 3, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1},
+                {0, 1, 0}// T-piece
+        }, this);
+
+        tetrisblocks[4] = new Blocks(blocks.getSubimage(blockSize * 4, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1},
+                {0, 0, 1}// J-piece
+        }, this);
+
+        tetrisblocks[5] = new Blocks(blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1},
+                {1, 0, 0}// L-piece
+        }, this);
+
+        tetrisblocks[6] = new Blocks(blocks.getSubimage(blockSize * 6, 0, blockSize, blockSize), new int[][]{
+                {1, 1},
+                {1, 1}// O-piece
+        }, this);
+
+        // current block in use
+        curentTetrisblock = tetrisblocks[2];
+    }
+
+    public void update() {
+        curentTetrisblock.update();
+    }
+
+    // enables us to start drowing blocks
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        /*
+         *  this piece of code draws the playing area
+         *   the first for loop does this
+         *   renders the horizontal lines
+         *   the second for loop does this
+         *   renders the vertical lines
+         * */
+        for (int i = 0; i < boardheight; i++) {
+            g.drawLine(0, i * blockSize, boardWidth * blockSize, i * blockSize);
+        }
+        for (int j = 0; j <= boardWidth; j++) {
+            g.drawLine(j * blockSize, 0, j * blockSize, boardheight * blockSize);
+        }
+
+        // renders the current tetrisblock on the playing field using the render method Located in the Blocks class
+        curentTetrisblock.render(g);
+
+    }
+
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // not used but has to stay here because otherwise i would receive errors and it won't compile without this !!!!!!!
+    }
+
+
+    // FIXME: 20/03/18 2:40 PM see VK_DOWN comment (+ keyreleased)  also see FIXME at Blocks.java bottom methods!
+    // FIXME: 20/03/18 2:50 PM UPDATE after some testing i have concluded that the bug takes place when i press any key!
+    // FIXME: 20/03/18 2:56 PM update after letting intellij analyze my code i found the bug  because it returned 2 possible bugs leaving the bug here for future reffrence
+
+
+    /*
+     *       else if (e.getKeyCode()==KeyEvent.VK_DOWN);// supposed to move blovk down faster it works to a degree but the same thing also happens when pressing left and right
+     *      curentTetrisblock.speedf();
+     *
+     *
+     *       if (e.getKeyCode()==KeyEvent.VK_DOWN);
+     *       curentTetrisblock.NormalS();
+     *
+     *
+     *
+     * left an ; directly after the if statement resulting it to be seen as having an empty body by java
+     * */
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) //move block left when pressing the left key
+        {
+            curentTetrisblock.setBlockXcoords(-1);
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) //move block right when pressing the right key
+        {
+            curentTetrisblock.setBlockXcoords(1);
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN)// supposed to move blovk down faster it works to a degree but the same thing also happens when pressing left and right
+        {
+            curentTetrisblock.speedf();
+        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (!timer.isRunning())// if timer.isrunning(false) start timer
+                timer.start();
+            else {
+                timer.stop(); // else start timer
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_DOWN)
+            curentTetrisblock.NormalS();
+    }
+}
+
+

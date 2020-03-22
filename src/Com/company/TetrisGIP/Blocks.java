@@ -11,6 +11,8 @@ public class Blocks {
     private int blockXcoords = 0;
     private int x, y;
 
+    private boolean collision = false, moveX = false;
+
     private int normalS = 1000, fast = 20, currents;
     private long time, lasttime;
 
@@ -63,6 +65,43 @@ public class Blocks {
         }
 
     }
+
+
+    public void rotate() {
+        int[][] rotatedMatrix = null;
+
+        rotatedMatrix = gettranspose(coords);
+
+        rotatedMatrix = getReverseMatrix(rotatedMatrix);
+
+        if (x + rotatedMatrix[0].length > 10 || y + rotatedMatrix.length > 20) {
+            return;
+        }
+        coords = rotatedMatrix;
+
+
+    }
+
+    private int[][] gettranspose(int[][] matrix) {
+        int[][] newMatrix = new int[matrix[0].length][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                newMatrix[j][i] = matrix[i][j];
+            }
+        }
+        return newMatrix;
+    }
+
+    private int[][] getReverseMatrix(int[][] matrix) {
+        int middle = matrix.length / 2;
+        for (int i = 0; i < middle; i++) {
+            int[] m = matrix[i];
+            matrix[i] = matrix[matrix.length - i - 1];
+            matrix[matrix.length - i - 1] = m;
+        }
+        return matrix;
+    }
+
 
     public void setBlockXcoords(int bXcoords) {
 

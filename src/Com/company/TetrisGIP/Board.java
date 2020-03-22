@@ -107,7 +107,7 @@ public class Board extends JPanel implements KeyListener {
         }, this);
 
         // current block in use
-        curentTetrisblock = tetrisblocks[2];
+        curentTetrisblock = tetrisblocks[3];
     }
 
     public void update() {
@@ -184,6 +184,8 @@ public class Board extends JPanel implements KeyListener {
             else {
                 timer.stop(); // else start timer
             }
+        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+            curentTetrisblock.rotate();
         }
     }
 

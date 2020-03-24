@@ -13,7 +13,7 @@ public class Blocks {
 
     private boolean collision = false, moveX = false;
 
-    private int normalS = 1000, fast = 20, currents;
+    private int normalS = 600, fast = 60, currents;
     private long time, lasttime;
 
 
@@ -38,17 +38,46 @@ public class Blocks {
         time = time + System.currentTimeMillis() - lasttime;
         lasttime = System.currentTimeMillis();
 
-        if (!(x + blockXcoords + coords[0].length > 10) && !(x + blockXcoords < 0))
-            x = x + blockXcoords;
+        if (collision) {
+            for (int row = 0; row < coords.length; row++) {
+                for (int col = 0; col < coords[row].length; col++) {
+                    if (coords[row][col] != 0) {
+                        board.getBoard()[y + row][x + col] = 1;
+                    }
+                }
+            }
+            board.nextblock();
+        }
+        if (!(x + blockXcoords + coords[0].length > 10) && !(x + blockXcoords < 0)) {
+
+            for (int row = 0; row < coords.length; row++)
+                for (int col = 0; col < coords[row].length; col++)
+                    if (coords[row][col] != 0) {
+                        if (board.getBoard()[y + row][x + blockXcoords + col] != 0)
+                            moveX = false;
+                    }
+            if (moveX)
+                x += blockXcoords;
+        }
+
 
         if (!(y + 1 + coords.length > 20)) {
+
+            for (int row = 0; row < coords.length; row++)
+                for (int col = 0; col < coords[row].length; col++)
+                    if (coords[row][col] != 0) {
+                        if (board.getBoard()[y + row + 1][col + x] != 0)
+                            collision = true;
+                    }
             if (time > currents) {
                 y++;
                 time = 0;
             }
+        } else {
+            collision = true;
         }
-
-
+        blockXcoords = 0;
+        moveX = true;
         blockXcoords = 0;
 
     }
@@ -58,12 +87,12 @@ public class Blocks {
 
         for (int row = 0; row < coords.length; row++) {
             for (int col = 0; col < coords[row].length; col++) {
-                if (coords[row][col] != 0)
+                if (coords[row][col] != 0) {
                     g.drawImage(block, col * board.getBlockSize() + x * board.getBlockSize(),
                             row * board.getBlockSize() + y * board.getBlockSize(), null);
+                }
             }
         }
-
     }
 
 
@@ -115,5 +144,13 @@ public class Blocks {
 
     public void speedf() {
         currents = fast;
+    }
+
+    public BufferedImage getBlock() {
+        return block;
+    }
+
+    public int[][] getCoords() {
+        return coords;
     }
 }

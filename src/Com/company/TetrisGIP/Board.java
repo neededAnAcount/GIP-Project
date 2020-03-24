@@ -19,7 +19,7 @@ public class Board extends JPanel implements KeyListener {
     //enables images to load in the project
     private BufferedImage blocks;
     // define matrix using 2D Arrays
-    private int[][] board = new int[boardWidth][boardheight];
+    private int[][] board = new int[boardheight][boardWidth];
 
     //Array for all the blocks
     //1 in matrix stands for a block
@@ -107,7 +107,7 @@ public class Board extends JPanel implements KeyListener {
         }, this);
 
         // current block in use
-        curentTetrisblock = tetrisblocks[3];
+        nextblock();
     }
 
     public void update() {
@@ -117,6 +117,15 @@ public class Board extends JPanel implements KeyListener {
     // enables us to start drowing blocks
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        curentTetrisblock.render(g);
+
+        for (int row = 0; row < board.length; row++)
+            for (int col = 0; col < board[row].length; col++)
+                if (board[row][col] != 0)
+                    g.drawImage(blocks.getSubimage((board[row][col] - 1) * blockSize, 0, blockSize, blockSize),
+                            col * blockSize, row * blockSize, null);
+
+
 
         /*
          *  this piece of code draws the playing area
@@ -133,9 +142,15 @@ public class Board extends JPanel implements KeyListener {
         }
 
         // renders the current tetrisblock on the playing field using the render method Located in the Blocks class
-        curentTetrisblock.render(g);
 
     }
+
+    public void nextblock() {
+        int index = (int) (Math.random() * tetrisblocks.length);
+        Blocks newblock = new Blocks(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this);
+        curentTetrisblock = newblock;
+    }
+
 
     public int getBlockSize() {
         return blockSize;
@@ -147,7 +162,9 @@ public class Board extends JPanel implements KeyListener {
         // not used but has to stay here because otherwise i would receive errors and it won't compile without this !!!!!!!
     }
 
-
+    public int[][] getBoard() {
+        return board;
+    }
     // FIXME: 20/03/18 2:40 PM see VK_DOWN comment (+ keyreleased)  also see FIXME at Blocks.java bottom methods!
     // FIXME: 20/03/18 2:50 PM UPDATE after some testing i have concluded that the bug takes place when i press any key!
     // FIXME: 20/03/18 2:56 PM update after letting intellij analyze my code i found the bug  because it returned 2 possible bugs leaving the bug here for future reffrence

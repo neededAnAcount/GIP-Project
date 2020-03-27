@@ -11,16 +11,19 @@ public class Blocks {
     private int blockXcoords = 0;
     private int x, y;
 
+    private int color;
+
     private boolean collision = false, moveX = false;
 
     private int normalS = 600, fast = 60, currents;
     private long time, lasttime;
 
 
-    public Blocks(BufferedImage block, int[][] coords, Board board) {
+    public Blocks(BufferedImage block, int[][] coords, Board board, int color) {
         this.block = block;
         this.coords = coords;
         this.board = board;
+        this.color = color;
         currents = normalS;
         time = 0;
         lasttime = System.currentTimeMillis();
@@ -34,41 +37,53 @@ public class Blocks {
 
     //update method
     public void update() {
-
-        time = time + System.currentTimeMillis() - lasttime;
+        moveX = true;
+        time += System.currentTimeMillis() - lasttime;
         lasttime = System.currentTimeMillis();
 
         if (collision) {
             for (int row = 0; row < coords.length; row++) {
+                for (int col = 0; col < coords[0].length; col++) {
+                    if (coords[row][col] != 0)
+                        board.getBoard()[y + row][x + col] = color;
+                }
+            }
+            linecheck();
+            board.addscore();
+            board.nextblock();
+            board.addlevel();
+        }
+
+        if (!(x + blockXcoords + coords[0].length > 10) && !(x + blockXcoords < 0)) {
+
+            for (int row = 0; row < coords.length; row++) {
                 for (int col = 0; col < coords[row].length; col++) {
                     if (coords[row][col] != 0) {
-                        board.getBoard()[y + row][x + col] = 1;
+                        if (board.getBoard()[y + row][x + blockXcoords + col] != 0) {
+                            moveX = false;
+                        }
+
                     }
                 }
             }
-            board.nextblock();
-        }
-        if (!(x + blockXcoords + coords[0].length > 10) && !(x + blockXcoords < 0)) {
 
-            for (int row = 0; row < coords.length; row++)
-                for (int col = 0; col < coords[row].length; col++)
-                    if (coords[row][col] != 0) {
-                        if (board.getBoard()[y + row][x + blockXcoords + col] != 0)
-                            moveX = false;
-                    }
             if (moveX)
                 x += blockXcoords;
-        }
 
+        }
 
         if (!(y + 1 + coords.length > 20)) {
 
-            for (int row = 0; row < coords.length; row++)
-                for (int col = 0; col < coords[row].length; col++)
+            for (int row = 0; row < coords.length; row++) {
+                for (int col = 0; col < coords[row].length; col++) {
                     if (coords[row][col] != 0) {
-                        if (board.getBoard()[y + row + 1][col + x] != 0)
+
+                        if (board.getBoard()[y + 1 + row][x + col] != 0) {
                             collision = true;
+                        }
                     }
+                }
+            }
             if (time > currents) {
                 y++;
                 time = 0;
@@ -76,10 +91,8 @@ public class Blocks {
         } else {
             collision = true;
         }
-        blockXcoords = 0;
-        moveX = true;
-        blockXcoords = 0;
 
+        blockXcoords = 0;
     }
 
     //render method using graphics g object
@@ -95,6 +108,20 @@ public class Blocks {
         }
     }
 
+    private void linecheck() {
+        int height = board.getBoard().length - 1;
+        for (int i = height; i > 0; i--) {
+            int counter = 0;
+
+            for (int j = 0; j < board.getBoard()[0].length; j++) {
+                if (board.getBoard()[i][j] != 0)
+                    counter++;
+                board.getBoard()[height][j] = board.getBoard()[i][j];
+            }
+            if (counter < board.getBoard()[0].length)
+                height--;
+        }
+    }
 
     public void rotate() {
         int[][] rotatedMatrix = null;
@@ -106,6 +133,15 @@ public class Blocks {
         if (x + rotatedMatrix[0].length > 10 || y + rotatedMatrix.length > 20) {
             return;
         }
+        for (int row = 0; row < rotatedMatrix.length; row++) {
+            for (int col = 0; col < rotatedMatrix[0].length; col++) {
+                if (board.getBoard()[y + row][x + col] != 0) {
+                    return;
+                }
+            }
+        }
+
+
         coords = rotatedMatrix;
 
 
@@ -152,5 +188,9 @@ public class Blocks {
 
     public int[][] getCoords() {
         return coords;
+    }
+
+    public int getColor() {
+        return color;
     }
 }

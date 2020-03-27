@@ -29,6 +29,7 @@ public class Board extends JPanel implements KeyListener {
     //defines current tetrisblock that the user is paying with;
     private Blocks curentTetrisblock;
 
+    private int score = 0;
 
     private Timer timer;
     //game is run at 60 frames per second as defined here
@@ -74,37 +75,37 @@ public class Board extends JPanel implements KeyListener {
         //  initializes the tetrisblocks
         tetrisblocks[0] = new Blocks(blocks.getSubimage(0, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1, 1}// Straight-piece
-        }, this);
+        }, this, 1);
 
         tetrisblocks[1] = new Blocks(blocks.getSubimage(blockSize, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 0},
                 {0, 1, 1}// Z-piece
-        }, this);
+        }, this, 2);
 
         tetrisblocks[2] = new Blocks(blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), new int[][]{
                 {0, 1, 1},
                 {1, 1, 0}// S-piece
-        }, this);
+        }, this, 3);
 
         tetrisblocks[3] = new Blocks(blocks.getSubimage(blockSize * 3, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1},
                 {0, 1, 0}// T-piece
-        }, this);
+        }, this, 4);
 
         tetrisblocks[4] = new Blocks(blocks.getSubimage(blockSize * 4, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1},
                 {0, 0, 1}// J-piece
-        }, this);
+        }, this, 5);
 
         tetrisblocks[5] = new Blocks(blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1},
                 {1, 0, 0}// L-piece
-        }, this);
+        }, this, 6);
 
         tetrisblocks[6] = new Blocks(blocks.getSubimage(blockSize * 6, 0, blockSize, blockSize), new int[][]{
                 {1, 1},
                 {1, 1}// O-piece
-        }, this);
+        }, this, 7);
 
         // current block in use
         nextblock();
@@ -126,7 +127,17 @@ public class Board extends JPanel implements KeyListener {
                             col * blockSize, row * blockSize, null);
 
 
+        g.setColor(Color.black);
 
+        g.setFont(new Font("Georgia", Font.BOLD, 20));
+
+        g.drawString("SCORE", Window.WIDTH - 225, Window.HEIGHT / 2);
+        g.drawString(score + "", Window.WIDTH - 225, Window.HEIGHT / 2 + 30);
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setStroke(new BasicStroke(2));
+        g2d.setColor(new Color(0, 0, 0, 100));
         /*
          *  this piece of code draws the playing area
          *   the first for loop does this
@@ -147,7 +158,7 @@ public class Board extends JPanel implements KeyListener {
 
     public void nextblock() {
         int index = (int) (Math.random() * tetrisblocks.length);
-        Blocks newblock = new Blocks(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this);
+        Blocks newblock = new Blocks(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this, tetrisblocks[index].getColor());
         curentTetrisblock = newblock;
     }
 
@@ -210,6 +221,10 @@ public class Board extends JPanel implements KeyListener {
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();
+    }
+
+    public void addscore() {
+        score++;
     }
 }
 

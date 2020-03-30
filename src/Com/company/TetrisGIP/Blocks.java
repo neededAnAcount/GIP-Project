@@ -93,6 +93,17 @@ public class Blocks {
         }
 
         blockXcoords = 0;
+
+        // FIXME: 20/03/30 this needs to be deleted this is test code to find a good leveling difficulty system
+        if (board.level == 2) {
+            normalS = 100;
+        } else if (board.level == 3) {
+            normalS = 400;
+        } else if (board.level == 4) {
+            normalS = 300;
+        } else if (board.level == 5) {
+            normalS = 200;
+        }
     }
 
     //render method using graphics g object
@@ -165,6 +176,7 @@ public class Blocks {
             matrix[matrix.length - i - 1] = m;
         }
         return matrix;
+
     }
 
 

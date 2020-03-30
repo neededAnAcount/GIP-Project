@@ -30,10 +30,10 @@ public class Board extends JPanel implements KeyListener {
     private Blocks curentTetrisblock;
 
     private int score = 0;
-    private int level = 0;
+    int level = 1;
     private Timer timer;
     //game is run at 60 frames per second as defined here
-    private int fps = 60;
+    int fps = 60;
     private int delay = 1000 / fps;
 
     // constructor for Board class

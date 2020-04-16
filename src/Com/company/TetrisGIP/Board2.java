@@ -10,37 +10,34 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Board extends JPanel implements KeyListener {
+public class Board2 extends JPanel implements KeyListener {
 
     //set the size of the blocks
     private final int blockSize = 30;
     //playing area size
     private final int boardWidth = 10, boardheight = 20;
+    int level = 1;
+    //game is run at 60 frames per second as defined here
+    int fps = 60;
     //enables images to load in the project
-    private BufferedImage blocks;
+    private BufferedImage blocks2;
     // define matrix using 2D Arrays
     private int[][] board = new int[boardheight][boardWidth];
-
     //Array for all the blocks
     //1 in matrix stands for a block
     //0 in matrix stands for empty space
-    private Blocks[] tetrisblocks = new Blocks[7];
-
+    private Blocks2[] tetrisblocks = new Blocks2[7];
     //defines current tetrisblock that the user is paying with;
-    private Blocks curentTetrisblock;
-
+    private Blocks2 curentTetrisblock;
     private int score = 0;
-    int level = 1;
     private Timer timer;
-    //game is run at 60 frames per second as defined here
-    int fps = 60;
     private int delay = 1000 / fps;
 
     // constructor for Board class
-    public Board() {
+    public Board2() {
         //initialize blocks
         try {
-            blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
+            blocks2 = ImageIO.read(Board2.class.getResource("/tiles.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,36 +70,36 @@ public class Board extends JPanel implements KeyListener {
          * */
 
         //  initializes the tetrisblocks
-        tetrisblocks[0] = new Blocks(blocks.getSubimage(0, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[0] = new Blocks2(blocks2.getSubimage(0, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1, 1}// Straight-piece
         }, this, 1);
 
-        tetrisblocks[1] = new Blocks(blocks.getSubimage(blockSize, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[1] = new Blocks2(blocks2.getSubimage(blockSize, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 0},
                 {0, 1, 1}// Z-piece
         }, this, 2);
 
-        tetrisblocks[2] = new Blocks(blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[2] = new Blocks2(blocks2.getSubimage(blockSize * 2, 0, blockSize, blockSize), new int[][]{
                 {0, 1, 1},
                 {1, 1, 0}// S-piece
         }, this, 3);
 
-        tetrisblocks[3] = new Blocks(blocks.getSubimage(blockSize * 3, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[3] = new Blocks2(blocks2.getSubimage(blockSize * 3, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1},
                 {0, 1, 0}// T-piece
         }, this, 4);
 
-        tetrisblocks[4] = new Blocks(blocks.getSubimage(blockSize * 4, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[4] = new Blocks2(blocks2.getSubimage(blockSize * 4, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1},
                 {0, 0, 1}// J-piece
         }, this, 5);
 
-        tetrisblocks[5] = new Blocks(blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[5] = new Blocks2(blocks2.getSubimage(blockSize * 5, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1},
                 {1, 0, 0}// L-piece
         }, this, 6);
 
-        tetrisblocks[6] = new Blocks(blocks.getSubimage(blockSize * 6, 0, blockSize, blockSize), new int[][]{
+        tetrisblocks[6] = new Blocks2(blocks2.getSubimage(blockSize * 6, 0, blockSize, blockSize), new int[][]{
                 {1, 1},
                 {1, 1}// O-piece
         }, this, 7);
@@ -123,14 +120,14 @@ public class Board extends JPanel implements KeyListener {
         for (int row = 0; row < board.length; row++)
             for (int col = 0; col < board[row].length; col++)
                 if (board[row][col] != 0)
-                    g.drawImage(blocks.getSubimage((board[row][col] - 1) * blockSize, 0, blockSize, blockSize),
+                    g.drawImage(blocks2.getSubimage((board[row][col] - 1) * blockSize, 0, blockSize, blockSize),
                             col * blockSize, row * blockSize, null);
 
 
         g.setColor(Color.black);
 
         g.setFont(new Font("Georgia", Font.BOLD, 20));
-        g.drawString("LEVEL", Window.WIDTH - 225, Window.HEIGHT / 2 - 60);
+        g.drawString("LEVCDCDCDCDCDCDCDCEL", Window.WIDTH - 225, Window.HEIGHT / 2 - 60);
         g.drawString(String.valueOf(level), Window.WIDTH - 225, Window.HEIGHT / 2 - 30);
         g.drawString("SCORE", Window.WIDTH - 225, Window.HEIGHT / 2);
         g.drawString(score + "", Window.WIDTH - 225, Window.HEIGHT / 2 + 30);
@@ -164,7 +161,7 @@ public class Board extends JPanel implements KeyListener {
 
     public void nextblock() {
         int index = (int) (Math.random() * tetrisblocks.length);
-        Blocks newblock = new Blocks(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this, tetrisblocks[index].getColor());
+        Blocks2 newblock = new Blocks2(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this, tetrisblocks[index].getColor());
         curentTetrisblock = newblock;
     }
 

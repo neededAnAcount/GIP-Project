@@ -3,14 +3,17 @@ package Com.company.TetrisGIP;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Board extends JPanel implements KeyListener {
+
+    public static final int SAVEWIDTH = 600, SAVEHEIGHT = 400;
+    //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
+    private JFrame saveEasy;
+    private JTextField username;
+    private JButton saveButton;
 
     //set the size of the blocks
     private final int blockSize = 30;
@@ -35,6 +38,7 @@ public class Board extends JPanel implements KeyListener {
     //game is run at 60 frames per second as defined here
     int fps = 60;
     private int delay = 1000 / fps;
+    private boolean gameover = false;
 
     // constructor for Board class
     public Board() {
@@ -113,6 +117,9 @@ public class Board extends JPanel implements KeyListener {
 
     public void update() {
         curentTetrisblock.update();
+        if (gameover) {
+            timer.stop();
+        }
     }
 
     // enables us to start drowing blocks
@@ -166,6 +173,50 @@ public class Board extends JPanel implements KeyListener {
         int index = (int) (Math.random() * tetrisblocks.length);
         Blocks newblock = new Blocks(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this, tetrisblocks[index].getColor());
         curentTetrisblock = newblock;
+
+        for (int row = 0; row < curentTetrisblock.getCoords().length; row++) {
+            for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
+                if (curentTetrisblock.getCoords()[row][col] != 0) {
+                    if (board[row][col + 3] != 0) {
+                        gameover = true;
+
+                        saveEasy = new JFrame("Save score");
+                        saveEasy.setLayout(new GridBagLayout());
+                        saveEasy.setSize(SAVEWIDTH, SAVEHEIGHT);
+                        saveEasy.setResizable(false);
+                        saveEasy.setLocationRelativeTo(null);
+
+                        username = new JTextField("enter player name or leave this as is to not save your score");
+                        username.setPreferredSize(new Dimension(370, 40));
+                        username.addFocusListener(new FocusListener() {
+                            @Override
+                            public void focusGained(FocusEvent e) {
+                                JTextField source = (JTextField) e.getComponent();
+                                source.setText("");
+                                source.removeFocusListener(this);
+                            }
+
+                            @Override
+                            public void focusLost(FocusEvent e) {
+                                //source for this code that deletes placeholder text
+                                //https://stackoverflow.com/questions/27844313/making-a-jtextfield-with-vanishing-text?rq=1
+                            }
+                        });
+
+
+                        saveButton = new JButton("Save");
+                        saveButton.setSize(100, 50);
+
+                        saveEasy.add(saveButton);
+                        saveEasy.add(username);
+                        saveEasy.getRootPane().setDefaultButton(saveButton); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
+                        saveButton.requestFocus();
+
+                        saveEasy.setVisible(true);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -217,6 +268,7 @@ public class Board extends JPanel implements KeyListener {
                 timer.start();
             else {
                 timer.stop(); // else start timer
+                paintcomponent2(getGraphics());
             }
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             curentTetrisblock.rotate();
@@ -227,6 +279,16 @@ public class Board extends JPanel implements KeyListener {
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();
+    }
+
+
+    public void paintcomponent2(Graphics e) {
+        super.paintComponent(e);
+        e.setColor(Color.white);
+        e.fillRect(0, 0, 1000, 1000);
+        e.setColor(Color.black);
+        e.setFont(new Font("Georgia", Font.BOLD, 35));
+        e.drawString("Game is paused", 135, 250);
     }
 
     public void addscore() {

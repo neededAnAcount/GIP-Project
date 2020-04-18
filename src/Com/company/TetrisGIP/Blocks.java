@@ -96,13 +96,23 @@ public class Blocks {
 
         // FIXME: 20/03/30 this needs to be deleted this is test code to find a good leveling difficulty system
         if (board.level == 2) {
-            normalS = 100;
+            normalS = 500;
         } else if (board.level == 3) {
-            normalS = 400;
+            normalS = 450;
         } else if (board.level == 4) {
-            normalS = 300;
+            normalS = 400;
         } else if (board.level == 5) {
+            normalS = 350;
+        } else if (board.level == 6) {
+            normalS = 300;
+        } else if (board.level == 7) {
+            normalS = 250;
+        } else if (board.level == 8) {
             normalS = 200;
+        } else if (board.level == 9) {
+            normalS = 150;
+        } else if (board.level == 10) {
+            normalS = 100;
         }
     }
 
@@ -135,6 +145,9 @@ public class Blocks {
     }
 
     public void rotate() {
+        if (collision) {
+            return;
+        }
         int[][] rotatedMatrix = null;
 
         rotatedMatrix = gettranspose(coords);
@@ -146,9 +159,7 @@ public class Blocks {
         }
         for (int row = 0; row < rotatedMatrix.length; row++) {
             for (int col = 0; col < rotatedMatrix[0].length; col++) {
-                if (board.getBoard()[y + row][x + col] != 0) {
-                    return;
-                }
+                if (board.getBoard()[y + row][x + col] != 0) return;
             }
         }
 

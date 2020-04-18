@@ -29,22 +29,19 @@ public class Window {
         window.setResizable(false);//makes the window size static and not resizable
         window.setLocationRelativeTo(null);// opens the window in the middle of the screen
         //make a button
-        JButton gm1 = new JButton("start gamemode 1");
+        JButton gm1 = new JButton("easy mode");
         gm1.setSize(100, 100);
         gm1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton gm2 = new JButton("Start gamemode 2");
+        JButton gm2 = new JButton("hard mode");
         gm2.setSize(100, 100);
         gm2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton explanation = new JButton("View the documentation");
-        explanation.setSize(100, 100);
-        explanation.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton scoreboard = new JButton("Scoreboard");
         scoreboard.setSize(100, 100);
         scoreboard.setAlignmentX(Component.CENTER_ALIGNMENT);
         window.add(gm1, gbc);
         gm1.addActionListener(e -> {
             if (gm1.isEnabled()) {
-                gamemode1 = new JFrame("classic tetris");
+                gamemode1 = new JFrame("easy classic tetris");
                 gamemode1.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
                 gamemode1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//closes the application after pressing the red cross
                 gamemode1.setResizable(false);//makes the window size static and not resizable
@@ -62,7 +59,7 @@ public class Window {
         window.add(space1, gbc);
         gm2.addActionListener(e -> {
             if (gm1.isEnabled()) {
-                gamemode2 = new JFrame("Custom tetris");
+                gamemode2 = new JFrame("hard classic tetris");
                 gamemode2.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
                 gamemode2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//closes the application after pressing the red cross
                 gamemode2.setResizable(false);//makes the window size static and not resizable
@@ -76,15 +73,6 @@ public class Window {
         });
 
         window.add(gm2, gbc);
-
-
-        JLabel space2 = new JLabel(" ");
-        space2.setAlignmentX(JFrame.CENTER_ALIGNMENT);
-        window.add(space2, gbc);
-
-
-        window.add(explanation, gbc);
-
 
         JLabel space3 = new JLabel(" ");
         space3.setAlignmentX(JFrame.CENTER_ALIGNMENT);

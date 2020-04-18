@@ -3,14 +3,17 @@ package Com.company.TetrisGIP;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+
 public class Board2 extends JPanel implements KeyListener {
+
+    //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
+    private JFrame saveHard;
+    private JTextField usernameHard;
+    private JButton saveButtonHard;
 
     //set the size of the blocks
     private final int blockSize = 30;
@@ -32,6 +35,7 @@ public class Board2 extends JPanel implements KeyListener {
     private int score = 0;
     private Timer timer;
     private int delay = 1000 / fps;
+    private boolean gameover = false;
 
     // constructor for Board class
     public Board2() {
@@ -127,7 +131,7 @@ public class Board2 extends JPanel implements KeyListener {
         g.setColor(Color.black);
 
         g.setFont(new Font("Georgia", Font.BOLD, 20));
-        g.drawString("LEVCDCDCDCDCDCDCDCEL", Window.WIDTH - 225, Window.HEIGHT / 2 - 60);
+        g.drawString("LEVEL", Window.WIDTH - 225, Window.HEIGHT / 2 - 60);
         g.drawString(String.valueOf(level), Window.WIDTH - 225, Window.HEIGHT / 2 - 30);
         g.drawString("SCORE", Window.WIDTH - 225, Window.HEIGHT / 2);
         g.drawString(score + "", Window.WIDTH - 225, Window.HEIGHT / 2 + 30);
@@ -136,7 +140,6 @@ public class Board2 extends JPanel implements KeyListener {
 
         g2d.setStroke(new BasicStroke(2));
         g2d.setColor(new Color(0, 0, 0, 100));
-
 
 
 
@@ -163,6 +166,48 @@ public class Board2 extends JPanel implements KeyListener {
         int index = (int) (Math.random() * tetrisblocks.length);
         Blocks2 newblock = new Blocks2(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this, tetrisblocks[index].getColor());
         curentTetrisblock = newblock;
+        for (int row = 0; row < curentTetrisblock.getCoords().length; row++) {
+            for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
+                if (curentTetrisblock.getCoords()[row][col] != 0) {
+                    if (board[row][col + 3] != 0) {
+                        gameover = true;
+                        saveHard = new JFrame("Save score");
+                        saveHard.setLayout(new GridBagLayout());
+                        saveHard.setSize(Board.SAVEWIDTH, Board.SAVEHEIGHT);
+                        saveHard.setResizable(false);
+                        saveHard.setLocationRelativeTo(null);
+
+                        usernameHard = new JTextField("enter player name or leave this as is to not save your score");
+                        usernameHard.setPreferredSize(new Dimension(370, 40));
+                        usernameHard.addFocusListener(new FocusListener() {
+                            @Override
+                            public void focusGained(FocusEvent e) {
+                                JTextField source = (JTextField) e.getComponent();
+                                source.setText("");
+                                source.removeFocusListener(this);
+                            }
+
+                            @Override
+                            public void focusLost(FocusEvent e) {
+                                //source for this code that deletes placeholder text
+                                //https://stackoverflow.com/questions/27844313/making-a-jtextfield-with-vanishing-text?rq=1
+                            }
+                        });
+
+
+                        saveButtonHard = new JButton("Save");
+                        saveButtonHard.setSize(100, 50);
+
+                        saveHard.add(saveButtonHard);
+                        saveHard.add(usernameHard);
+                        saveHard.getRootPane().setDefaultButton(saveButtonHard); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
+                        saveButtonHard.requestFocus();
+
+                        saveHard.setVisible(true);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -213,7 +258,8 @@ public class Board2 extends JPanel implements KeyListener {
             if (!timer.isRunning())// if timer.isrunning(false) start timer
                 timer.start();
             else {
-                timer.stop(); // else start timer
+                timer.stop();// else start timer
+                paintcomponent2(getGraphics());
             }
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             curentTetrisblock.rotate();
@@ -224,6 +270,15 @@ public class Board2 extends JPanel implements KeyListener {
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();
+    }
+
+    public void paintcomponent2(Graphics e) {
+        super.paintComponent(e);
+        e.setColor(Color.white);
+        e.fillRect(0, 0, 1000, 1000);
+        e.setColor(Color.black);
+        e.setFont(new Font("Georgia", Font.BOLD, 35));
+        e.drawString("Game is paused", 135, 250);
     }
 
     public void addscore() {

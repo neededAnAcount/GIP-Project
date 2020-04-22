@@ -3,14 +3,13 @@ package Com.company.TetrisGIP;
 import javax.swing.*;
 import java.awt.*;
 
-public class Window {
+public class Window extends JFrame {
     //sets the height and with to be used everywhere in the project and makes the variables unchangeable
     public static final int WIDTH = 600, HEIGHT = 640;
     //creates a Jframe object
     private JFrame window;
     private JFrame gamemode1;
-    private JFrame gamemode2;
-    private JFrame explain;
+    public JFrame gamemode2;
     private JFrame scoreboard;
     //creates object of Board class
     private Board board;
@@ -49,8 +48,8 @@ public class Window {
                 board = new Board();
                 gamemode1.add(board);
                 gamemode1.addKeyListener(board);
-                window.setVisible(false);
                 gamemode1.setVisible(true);
+                window.setVisible(false);
             }
         });
 
@@ -61,14 +60,13 @@ public class Window {
             if (gm1.isEnabled()) {
                 gamemode2 = new JFrame("hard classic tetris");
                 gamemode2.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
-                gamemode2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//closes the application after pressing the red cross
                 gamemode2.setResizable(false);//makes the window size static and not resizable
                 gamemode2.setLocationRelativeTo(null);// opens the window in the middle of the screen
                 board2 = new Board2();
                 gamemode2.add(board2);
                 gamemode2.addKeyListener(board2);
-                window.setVisible(false);
                 gamemode2.setVisible(true);
+                window.setVisible(false);
             }
         });
 
@@ -81,18 +79,16 @@ public class Window {
 
         window.add(scoreboard, gbc);
 
-
-        // FIXME: 20/04/01 this is going to be in ifekse statements to load the games by setting the window that loads the buttons invisible and loading the game into new jframes same with the explanation and scoreboard
-  /*      board = new Board(); // initializes board object
-        window.add(board);
-        window.addKeyListener(board);*/
-
-
         window.setVisible(true);
     }
+
 
     // this makes an object of this class
     public static void main(String[] args) {
         new Window();
+    }
+
+    public void setGamemode2() {
+        gamemode2.setVisible(false);
     }
 }

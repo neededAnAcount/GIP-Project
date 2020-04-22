@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 
 public class Board2 extends JPanel implements KeyListener {
@@ -14,6 +15,8 @@ public class Board2 extends JPanel implements KeyListener {
     private JFrame saveHard;
     private JTextField usernameHard;
     private JButton saveButtonHard;
+    String textFieldValue = null;
+    private JButton cancelButton;
 
     //set the size of the blocks
     private final int blockSize = 30;
@@ -116,7 +119,7 @@ public class Board2 extends JPanel implements KeyListener {
         curentTetrisblock.update();
     }
 
-    // enables us to start drowing blocks
+    // enables us to start drawing blocks
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         curentTetrisblock.render(g);
@@ -170,14 +173,21 @@ public class Board2 extends JPanel implements KeyListener {
             for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
+                        timer.stop();
                         gameover = true;
                         saveHard = new JFrame("Save score");
                         saveHard.setLayout(new GridBagLayout());
+                        GridBagConstraints gbc = new GridBagConstraints();
+                        GridBagConstraints gbc2 = new GridBagConstraints();
+                        GridBagConstraints gbc3 = new GridBagConstraints();
+                        gbc.anchor = GridBagConstraints.LAST_LINE_END;
+                        gbc2.anchor = GridBagConstraints.LAST_LINE_START;
+                        gbc3.anchor = GridBagConstraints.CENTER;
                         saveHard.setSize(Board.SAVEWIDTH, Board.SAVEHEIGHT);
                         saveHard.setResizable(false);
                         saveHard.setLocationRelativeTo(null);
 
-                        usernameHard = new JTextField("enter player name or leave this as is to not save your score");
+                        usernameHard = new JTextField("enter player name");
                         usernameHard.setPreferredSize(new Dimension(370, 40));
                         usernameHard.addFocusListener(new FocusListener() {
                             @Override
@@ -197,9 +207,33 @@ public class Board2 extends JPanel implements KeyListener {
 
                         saveButtonHard = new JButton("Save");
                         saveButtonHard.setSize(100, 50);
+                        saveButtonHard.addActionListener(e -> {
+                            if (saveButtonHard.isEnabled()) {
+                                textFieldValue = usernameHard.getText();
+                            }
+                        });
 
-                        saveHard.add(saveButtonHard);
-                        saveHard.add(usernameHard);
+
+                        cancelButton = new JButton("Cancel");
+                        cancelButton.setSize(100, 50);
+                        cancelButton.addActionListener(e -> {
+                            if (saveButtonHard.isEnabled()) {
+                                saveHard.setVisible(false);
+                                paintcomponent3(getGraphics());
+                                try {
+                                    TimeUnit.SECONDS.sleep(5);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                                Window w = new Window();
+                                w.setVisible(true);
+
+                            }
+                        });
+
+                        saveHard.add(saveButtonHard, gbc);
+                        saveHard.add(usernameHard, gbc3);
+                        saveHard.add(cancelButton, gbc2);
                         saveHard.getRootPane().setDefaultButton(saveButtonHard); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
                         saveButtonHard.requestFocus();
 
@@ -210,6 +244,13 @@ public class Board2 extends JPanel implements KeyListener {
         }
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public String getTextFieldValue() {
+        return textFieldValue;
+    }
 
     public int getBlockSize() {
         return blockSize;
@@ -224,24 +265,6 @@ public class Board2 extends JPanel implements KeyListener {
     public int[][] getBoard() {
         return board;
     }
-    // FIXME: 20/03/18 2:40 PM see VK_DOWN comment (+ keyreleased)  also see FIXME at Blocks.java bottom methods!
-    // FIXME: 20/03/18 2:50 PM UPDATE after some testing i have concluded that the bug takes place when i press any key!
-    // FIXME: 20/03/18 2:56 PM update after letting intellij analyze my code i found the bug  because it returned 2 possible bugs leaving the bug here for future reffrence
-
-
-    /*
-     *       else if (e.getKeyCode()==KeyEvent.VK_DOWN);// supposed to move blovk down faster it works to a degree but the same thing also happens when pressing left and right
-     *      curentTetrisblock.speedf();
-     *
-     *
-     *       if (e.getKeyCode()==KeyEvent.VK_DOWN);
-     *       curentTetrisblock.NormalS();
-     *
-     *
-     *
-     * left an ; directly after the if statement resulting it to be seen as having an empty body by java
-     * */
-
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -251,7 +274,7 @@ public class Board2 extends JPanel implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) //move block right when pressing the right key
         {
             curentTetrisblock.setBlockXcoords(1);
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN)// supposed to move blovk down faster it works to a degree but the same thing also happens when pressing left and right
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN)// supposed to move block down faster it works to a degree but the same thing also happens when pressing left and right
         {
             curentTetrisblock.speedf();
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -281,6 +304,16 @@ public class Board2 extends JPanel implements KeyListener {
         e.drawString("Game is paused", 135, 250);
     }
 
+    public void paintcomponent3(Graphics e) {
+        super.paintComponent(e);
+        e.setColor(Color.white);
+        e.fillRect(0, 0, 1000, 1000);
+        e.setColor(Color.black);
+        e.setFont(new Font("Georgia", Font.BOLD, 35));
+        e.drawString("close this window", 135, 250);
+        e.drawString("loading...", 200, 280);
+    }
+
     public void addscore() {
         score++;
     }
@@ -289,6 +322,7 @@ public class Board2 extends JPanel implements KeyListener {
         if (score % 10 == 0)
             level++;
     }
+
 }
 
 

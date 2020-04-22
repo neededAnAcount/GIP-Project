@@ -6,15 +6,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Board extends JPanel implements KeyListener {
-
     public static final int SAVEWIDTH = 600, SAVEHEIGHT = 400;
     //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
     private JFrame saveEasy;
     private JTextField username;
     private JButton saveButton;
-
+    String textFieldValue = null;
+    private JButton cancelButton;
     //set the size of the blocks
     private final int blockSize = 30;
     //playing area size
@@ -119,6 +120,69 @@ public class Board extends JPanel implements KeyListener {
         curentTetrisblock.update();
         if (gameover) {
             timer.stop();
+            saveEasy = new JFrame("Save score");
+            saveEasy.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            GridBagConstraints gbc2 = new GridBagConstraints();
+            GridBagConstraints gbc3 = new GridBagConstraints();
+            gbc.anchor = GridBagConstraints.LAST_LINE_END;
+            gbc2.anchor = GridBagConstraints.LAST_LINE_START;
+            gbc3.anchor = GridBagConstraints.CENTER;
+            saveEasy.setSize(Board.SAVEWIDTH, Board.SAVEHEIGHT);
+            saveEasy.setResizable(false);
+            saveEasy.setLocationRelativeTo(null);
+
+            username = new JTextField("enter player name");
+            username.setPreferredSize(new Dimension(370, 40));
+            username.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    JTextField source = (JTextField) e.getComponent();
+                    source.setText("");
+                    source.removeFocusListener(this);
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    //source for this code that deletes placeholder text
+                    //https://stackoverflow.com/questions/27844313/making-a-jtextfield-with-vanishing-text?rq=1
+                }
+            });
+
+
+            saveButton = new JButton("Save");
+            saveButton.setSize(100, 50);
+            saveButton.addActionListener(e -> {
+                if (saveButton.isEnabled()) {
+                    textFieldValue = username.getText();
+                }
+            });
+
+
+            cancelButton = new JButton("Cancel");
+            cancelButton.setSize(100, 50);
+            cancelButton.addActionListener(e -> {
+                if (saveButton.isEnabled()) {
+                    saveEasy.setVisible(false);
+                    paintcomponent3(getGraphics());
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    Window w = new Window();
+                    w.setVisible(true);
+
+                }
+            });
+
+            saveEasy.add(saveButton, gbc);
+            saveEasy.add(username, gbc3);
+            saveEasy.add(cancelButton, gbc2);
+            saveEasy.getRootPane().setDefaultButton(saveButton); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
+            saveButton.requestFocus();
+
+            saveEasy.setVisible(true);
         }
     }
 
@@ -233,23 +297,7 @@ public class Board extends JPanel implements KeyListener {
     public int[][] getBoard() {
         return board;
     }
-    // FIXME: 20/03/18 2:40 PM see VK_DOWN comment (+ keyreleased)  also see FIXME at Blocks.java bottom methods!
-    // FIXME: 20/03/18 2:50 PM UPDATE after some testing i have concluded that the bug takes place when i press any key!
-    // FIXME: 20/03/18 2:56 PM update after letting intellij analyze my code i found the bug  because it returned 2 possible bugs leaving the bug here for future reffrence
 
-
-    /*
-     *       else if (e.getKeyCode()==KeyEvent.VK_DOWN);// supposed to move blovk down faster it works to a degree but the same thing also happens when pressing left and right
-     *      curentTetrisblock.speedf();
-     *
-     *
-     *       if (e.getKeyCode()==KeyEvent.VK_DOWN);
-     *       curentTetrisblock.NormalS();
-     *
-     *
-     *
-     * left an ; directly after the if statement resulting it to be seen as having an empty body by java
-     * */
 
 
     @Override
@@ -289,6 +337,16 @@ public class Board extends JPanel implements KeyListener {
         e.setColor(Color.black);
         e.setFont(new Font("Georgia", Font.BOLD, 35));
         e.drawString("Game is paused", 135, 250);
+    }
+
+    public void paintcomponent3(Graphics e) {
+        super.paintComponent(e);
+        e.setColor(Color.white);
+        e.fillRect(0, 0, 1000, 1000);
+        e.setColor(Color.black);
+        e.setFont(new Font("Georgia", Font.BOLD, 35));
+        e.drawString("close this window", 135, 250);
+        e.drawString("loading...", 200, 280);
     }
 
     public void addscore() {

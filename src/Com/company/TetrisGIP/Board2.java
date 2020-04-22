@@ -14,6 +14,8 @@ public class Board2 extends JPanel implements KeyListener {
     private JFrame saveHard;
     private JTextField usernameHard;
     private JButton saveButtonHard;
+    String textFieldValue = null;
+    private JButton cancelButton;
 
     //set the size of the blocks
     private final int blockSize = 30;
@@ -171,13 +173,20 @@ public class Board2 extends JPanel implements KeyListener {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
                         gameover = true;
+                        timer.stop();
                         saveHard = new JFrame("Save score");
                         saveHard.setLayout(new GridBagLayout());
+                        GridBagConstraints gbc = new GridBagConstraints();
+                        GridBagConstraints gbc2 = new GridBagConstraints();
+                        GridBagConstraints gbc3 = new GridBagConstraints();
+                        gbc.anchor = GridBagConstraints.LAST_LINE_END;
+                        gbc2.anchor = GridBagConstraints.LAST_LINE_START;
+                        gbc3.anchor = GridBagConstraints.CENTER;
                         saveHard.setSize(Board.SAVEWIDTH, Board.SAVEHEIGHT);
                         saveHard.setResizable(false);
                         saveHard.setLocationRelativeTo(null);
 
-                        usernameHard = new JTextField("enter player name or leave this as is to not save your score");
+                        usernameHard = new JTextField("enter player name");
                         usernameHard.setPreferredSize(new Dimension(370, 40));
                         usernameHard.addFocusListener(new FocusListener() {
                             @Override
@@ -197,9 +206,26 @@ public class Board2 extends JPanel implements KeyListener {
 
                         saveButtonHard = new JButton("Save");
                         saveButtonHard.setSize(100, 50);
+                        saveButtonHard.addActionListener(e -> {
+                            if (saveButtonHard.isEnabled()) {
+                                textFieldValue = usernameHard.getText();
+                            }
+                        });
 
-                        saveHard.add(saveButtonHard);
-                        saveHard.add(usernameHard);
+
+                        cancelButton = new JButton("Cancel");
+                        cancelButton.setSize(100, 50);
+                        cancelButton.addActionListener(e -> {
+                            if (saveButtonHard.isEnabled()) {
+                                Window w = new Window();
+                                w.setVisible(true);
+                                saveHard.setVisible(false);
+                            }
+                        });
+
+                        saveHard.add(saveButtonHard, gbc);
+                        saveHard.add(usernameHard, gbc3);
+                        saveHard.add(cancelButton, gbc2);
                         saveHard.getRootPane().setDefaultButton(saveButtonHard); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
                         saveButtonHard.requestFocus();
 
@@ -210,6 +236,13 @@ public class Board2 extends JPanel implements KeyListener {
         }
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public String getTextFieldValue() {
+        return textFieldValue;
+    }
 
     public int getBlockSize() {
         return blockSize;
@@ -224,24 +257,6 @@ public class Board2 extends JPanel implements KeyListener {
     public int[][] getBoard() {
         return board;
     }
-    // FIXME: 20/03/18 2:40 PM see VK_DOWN comment (+ keyreleased)  also see FIXME at Blocks.java bottom methods!
-    // FIXME: 20/03/18 2:50 PM UPDATE after some testing i have concluded that the bug takes place when i press any key!
-    // FIXME: 20/03/18 2:56 PM update after letting intellij analyze my code i found the bug  because it returned 2 possible bugs leaving the bug here for future reffrence
-
-
-    /*
-     *       else if (e.getKeyCode()==KeyEvent.VK_DOWN);// supposed to move blovk down faster it works to a degree but the same thing also happens when pressing left and right
-     *      curentTetrisblock.speedf();
-     *
-     *
-     *       if (e.getKeyCode()==KeyEvent.VK_DOWN);
-     *       curentTetrisblock.NormalS();
-     *
-     *
-     *
-     * left an ; directly after the if statement resulting it to be seen as having an empty body by java
-     * */
-
 
     @Override
     public void keyPressed(KeyEvent e) {

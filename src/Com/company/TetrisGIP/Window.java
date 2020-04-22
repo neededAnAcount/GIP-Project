@@ -3,7 +3,7 @@ package Com.company.TetrisGIP;
 import javax.swing.*;
 import java.awt.*;
 
-public class Window {
+public class Window extends JFrame {
     //sets the height and with to be used everywhere in the project and makes the variables unchangeable
     public static final int WIDTH = 600, HEIGHT = 640;
     //creates a Jframe object
@@ -49,8 +49,8 @@ public class Window {
                 board = new Board();
                 gamemode1.add(board);
                 gamemode1.addKeyListener(board);
-                window.setVisible(false);
                 gamemode1.setVisible(true);
+                window.setVisible(false);
             }
         });
 
@@ -67,8 +67,8 @@ public class Window {
                 board2 = new Board2();
                 gamemode2.add(board2);
                 gamemode2.addKeyListener(board2);
-                window.setVisible(false);
                 gamemode2.setVisible(true);
+                window.setVisible(false);
             }
         });
 
@@ -81,18 +81,16 @@ public class Window {
 
         window.add(scoreboard, gbc);
 
-
-        // FIXME: 20/04/01 this is going to be in ifekse statements to load the games by setting the window that loads the buttons invisible and loading the game into new jframes same with the explanation and scoreboard
-  /*      board = new Board(); // initializes board object
-        window.add(board);
-        window.addKeyListener(board);*/
-
-
         window.setVisible(true);
     }
+
 
     // this makes an object of this class
     public static void main(String[] args) {
         new Window();
+    }
+
+    public void setGamemode2() {
+        gamemode2.setVisible(false);
     }
 }

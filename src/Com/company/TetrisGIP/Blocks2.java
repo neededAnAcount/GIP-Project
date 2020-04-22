@@ -105,6 +105,8 @@ public class Blocks2 {
             normalS = 200;
         } else if (board2.level == 6) {
             normalS = 100;
+        } else if (board2.level == 7) {
+            normalS = 80;
         }
     }
 

@@ -271,11 +271,27 @@ public class Board extends JPanel implements KeyListener {
                         saveButton = new JButton("Save");
                         saveButton.setSize(100, 50);
 
+                        cancelButton = new JButton("Cancel");
+                        cancelButton.setSize(100, 50);
+                        cancelButton.addActionListener(e -> {
+                            if (saveButton.isEnabled()) {
+                                saveEasy.setVisible(false);
+                                paintcomponent3(getGraphics());
+                                try {
+                                    TimeUnit.SECONDS.sleep(5);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                                Window w = new Window();
+                                w.setVisible(true);
+
+                            }
+                        });
+
                         saveEasy.add(saveButton);
                         saveEasy.add(username);
                         saveEasy.getRootPane().setDefaultButton(saveButton); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
                         saveButton.requestFocus();
-
                         saveEasy.setVisible(true);
                     }
                 }
@@ -346,7 +362,6 @@ public class Board extends JPanel implements KeyListener {
         e.setColor(Color.black);
         e.setFont(new Font("Georgia", Font.BOLD, 35));
         e.drawString("close this window", 135, 250);
-        e.drawString("loading...", 200, 280);
     }
 
     public void addscore() {

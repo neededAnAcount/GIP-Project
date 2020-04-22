@@ -310,8 +310,6 @@ public class Board2 extends JPanel implements KeyListener {
         e.fillRect(0, 0, 1000, 1000);
         e.setColor(Color.black);
         e.setFont(new Font("Georgia", Font.BOLD, 35));
-        e.drawString("close this window", 135, 250);
-        e.drawString("loading...", 200, 280);
     }
 
     public void addscore() {

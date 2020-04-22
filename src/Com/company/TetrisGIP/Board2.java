@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 
 public class Board2 extends JPanel implements KeyListener {
@@ -220,11 +219,6 @@ public class Board2 extends JPanel implements KeyListener {
                             if (saveButtonHard.isEnabled()) {
                                 saveHard.setVisible(false);
                                 paintcomponent3(getGraphics());
-                                try {
-                                    TimeUnit.SECONDS.sleep(5);
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
                                 Window w = new Window();
                                 w.setVisible(true);
 

@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class Board extends JPanel implements KeyListener {
     public static final int SAVEWIDTH = 600, SAVEHEIGHT = 400;
@@ -118,72 +117,6 @@ public class Board extends JPanel implements KeyListener {
 
     public void update() {
         curentTetrisblock.update();
-        if (gameover) {
-            timer.stop();
-            saveEasy = new JFrame("Save score");
-            saveEasy.setLayout(new GridBagLayout());
-            GridBagConstraints gbc = new GridBagConstraints();
-            GridBagConstraints gbc2 = new GridBagConstraints();
-            GridBagConstraints gbc3 = new GridBagConstraints();
-            gbc.anchor = GridBagConstraints.LAST_LINE_END;
-            gbc2.anchor = GridBagConstraints.LAST_LINE_START;
-            gbc3.anchor = GridBagConstraints.CENTER;
-            saveEasy.setSize(Board.SAVEWIDTH, Board.SAVEHEIGHT);
-            saveEasy.setResizable(false);
-            saveEasy.setLocationRelativeTo(null);
-
-            username = new JTextField("enter player name");
-            username.setPreferredSize(new Dimension(370, 40));
-            username.addFocusListener(new FocusListener() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    JTextField source = (JTextField) e.getComponent();
-                    source.setText("");
-                    source.removeFocusListener(this);
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    //source for this code that deletes placeholder text
-                    //https://stackoverflow.com/questions/27844313/making-a-jtextfield-with-vanishing-text?rq=1
-                }
-            });
-
-
-            saveButton = new JButton("Save");
-            saveButton.setSize(100, 50);
-            saveButton.addActionListener(e -> {
-                if (saveButton.isEnabled()) {
-                    textFieldValue = username.getText();
-                }
-            });
-
-
-            cancelButton = new JButton("Cancel");
-            cancelButton.setSize(100, 50);
-            cancelButton.addActionListener(e -> {
-                if (saveButton.isEnabled()) {
-                    saveEasy.setVisible(false);
-                    paintcomponent3(getGraphics());
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    Window w = new Window();
-                    w.setVisible(true);
-
-                }
-            });
-
-            saveEasy.add(saveButton, gbc);
-            saveEasy.add(username, gbc3);
-            saveEasy.add(cancelButton, gbc2);
-            saveEasy.getRootPane().setDefaultButton(saveButton); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
-            saveButton.requestFocus();
-
-            saveEasy.setVisible(true);
-        }
     }
 
     // enables us to start drowing blocks
@@ -246,6 +179,12 @@ public class Board extends JPanel implements KeyListener {
 
                         saveEasy = new JFrame("Save score");
                         saveEasy.setLayout(new GridBagLayout());
+                        GridBagConstraints gbc = new GridBagConstraints();
+                        GridBagConstraints gbc2 = new GridBagConstraints();
+                        GridBagConstraints gbc3 = new GridBagConstraints();
+                        gbc.anchor = GridBagConstraints.LAST_LINE_END;
+                        gbc2.anchor = GridBagConstraints.LAST_LINE_START;
+                        gbc3.anchor = GridBagConstraints.CENTER;
                         saveEasy.setSize(SAVEWIDTH, SAVEHEIGHT);
                         saveEasy.setResizable(false);
                         saveEasy.setLocationRelativeTo(null);
@@ -270,6 +209,12 @@ public class Board extends JPanel implements KeyListener {
 
                         saveButton = new JButton("Save");
                         saveButton.setSize(100, 50);
+                        saveButton.addActionListener(e -> {
+                            if (saveButton.isEnabled()) {
+                                textFieldValue = username.getText();
+                            }
+                        });
+
 
                         cancelButton = new JButton("Cancel");
                         cancelButton.setSize(100, 50);
@@ -277,21 +222,18 @@ public class Board extends JPanel implements KeyListener {
                             if (saveButton.isEnabled()) {
                                 saveEasy.setVisible(false);
                                 paintcomponent3(getGraphics());
-                                try {
-                                    TimeUnit.SECONDS.sleep(5);
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
                                 Window w = new Window();
                                 w.setVisible(true);
 
                             }
                         });
 
-                        saveEasy.add(saveButton);
-                        saveEasy.add(username);
+                        saveEasy.add(saveButton, gbc);
+                        saveEasy.add(username, gbc3);
+                        saveEasy.add(cancelButton, gbc2);
                         saveEasy.getRootPane().setDefaultButton(saveButton); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
                         saveButton.requestFocus();
+
                         saveEasy.setVisible(true);
                     }
                 }

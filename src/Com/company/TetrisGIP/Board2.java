@@ -10,20 +10,19 @@ import java.io.IOException;
 
 public class Board2 extends JPanel implements KeyListener {
 
-    //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
-    private JFrame saveHard;
-    private JTextField usernameHard;
-    private JButton saveButtonHard;
-    String textFieldValue = null;
-    private JButton cancelButton;
-
     //set the size of the blocks
     private final int blockSize = 30;
     //playing area size
     private final int boardWidth = 10, boardheight = 20;
+    String textFieldValue = null;
     int level = 1;
     //game is run at 60 frames per second as defined here
     int fps = 60;
+    //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
+    private JFrame saveHard;
+    private JTextField usernameHard;
+    private JButton saveButtonHard;
+    private JButton cancelButton;
     //enables images to load in the project
     private BufferedImage blocks2;
     // define matrix using 2D Arrays
@@ -37,7 +36,6 @@ public class Board2 extends JPanel implements KeyListener {
     private int score = 0;
     private Timer timer;
     private int delay = 1000 / fps;
-    private boolean gameover = false;
 
     // constructor for Board class
     public Board2() {
@@ -172,8 +170,8 @@ public class Board2 extends JPanel implements KeyListener {
             for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
+                        // save menu code
                         timer.stop();
-                        gameover = true;
                         saveHard = new JFrame("Save score");
                         saveHard.setLayout(new GridBagLayout());
                         GridBagConstraints gbc = new GridBagConstraints();

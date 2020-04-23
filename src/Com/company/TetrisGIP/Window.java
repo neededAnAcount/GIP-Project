@@ -24,7 +24,6 @@ public class Window extends JFrame {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         window.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//closes the application after pressing the red cross
         window.setResizable(false);//makes the window size static and not resizable
         window.setLocationRelativeTo(null);// opens the window in the middle of the screen
         //make a button

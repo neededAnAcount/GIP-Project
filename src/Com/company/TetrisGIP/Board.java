@@ -175,8 +175,8 @@ public class Board extends JPanel implements KeyListener {
             for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
-                        gameover = true;
-
+                        //save menu code
+                        timer.stop();
                         saveEasy = new JFrame("Save score");
                         saveEasy.setLayout(new GridBagLayout());
                         GridBagConstraints gbc = new GridBagConstraints();
@@ -224,7 +224,6 @@ public class Board extends JPanel implements KeyListener {
                                 paintcomponent3(getGraphics());
                                 Window w = new Window();
                                 w.setVisible(true);
-
                             }
                         });
 

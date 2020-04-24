@@ -9,34 +9,31 @@ import java.io.IOException;
 
 public class Board extends JPanel implements KeyListener {
     public static final int SAVEWIDTH = 600, SAVEHEIGHT = 400;
-    //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
-    private JFrame saveEasy;
-    private JTextField username;
-    private JButton saveButton;
-    String textFieldValue = null;
-    private JButton cancelButton;
     //set the size of the blocks
     private final int blockSize = 30;
     //playing area size
     private final int boardWidth = 10, boardheight = 20;
+    String textFieldValue = null;
+    int level = 1;
+    //game is run at 60 frames per second as defined here
+    int fps = 60;
+    //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
+    private JFrame saveEasy;
+    private JTextField username;
+    private JButton saveButton;
+    private JButton cancelButton;
     //enables images to load in the project
     private BufferedImage blocks;
     // define matrix using 2D Arrays
     private int[][] board = new int[boardheight][boardWidth];
-
     //Array for all the blocks
     //1 in matrix stands for a block
     //0 in matrix stands for empty space
     private Blocks[] tetrisblocks = new Blocks[7];
-
     //defines current tetrisblock that the user is paying with;
     private Blocks curentTetrisblock;
-
     private int score = 0;
-    int level = 1;
     private Timer timer;
-    //game is run at 60 frames per second as defined here
-    int fps = 60;
     private int delay = 1000 / fps;
     private boolean gameover = false;
 
@@ -254,7 +251,6 @@ public class Board extends JPanel implements KeyListener {
     public int[][] getBoard() {
         return board;
     }
-
 
 
     @Override

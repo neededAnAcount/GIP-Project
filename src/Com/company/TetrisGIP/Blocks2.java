@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Blocks2 {
 
+
     private BufferedImage block2; // enables drawing of block
     private int[][] coords; // coordinates of blocks
     private Board2 board2; // access to playing area
@@ -212,4 +213,5 @@ public class Blocks2 {
     public int getColor() {
         return color;
     }
+
 }

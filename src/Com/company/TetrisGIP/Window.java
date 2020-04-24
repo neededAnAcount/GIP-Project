@@ -6,10 +6,10 @@ import java.awt.*;
 public class Window extends JFrame {
     //sets the height and with to be used everywhere in the project and makes the variables unchangeable
     public static final int WIDTH = 600, HEIGHT = 640;
+    public JFrame gamemode2;
     //creates a Jframe object
     private JFrame window;
     private JFrame gamemode1;
-    public JFrame gamemode2;
     private JFrame scoreboard;
     //creates object of Board class
     private Board board;

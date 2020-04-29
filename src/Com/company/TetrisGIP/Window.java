@@ -1,5 +1,8 @@
 package Com.company.TetrisGIP;
 
+import Com.company.TetrisGIP.Database.connectDB;
+import Com.company.TetrisGIP.Database.insertDB;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,6 +21,13 @@ public class Window extends JFrame {
 
     //constructor for the window class
     public Window() {
+        connectDB.connect();//test if connected
+        selectDB select = new selectDB();
+        insertDB insertAPP = new insertDB();
+        // insert one test new rows
+        insertAPP.insert("timon", 3000);
+        select.selectAll();
+
         window = new JFrame("Main Menu");
         window.setLayout(new GridBagLayout());// puts the buttons in the center and keeps the assigned size also looked this up because the previous thing i tried did not work
         GridBagConstraints gbc = new GridBagConstraints();

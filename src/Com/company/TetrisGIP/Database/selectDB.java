@@ -1,4 +1,4 @@
-package Com.company.TetrisGIP;
+package Com.company.TetrisGIP.Database;
 
 import java.sql.*;
 
@@ -11,7 +11,7 @@ public class selectDB {
      */
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:C://sqlite/db/test.db";
+        String url = "jdbc:sqlite:C:\\Users\\timon\\Desktop\\GIP\\Gipcode\\src\\Com\\company\\TetrisGIP\\Database\\scoreboard.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -26,7 +26,7 @@ public class selectDB {
      * select all rows in the warehouses table
      */
     public void selectAll() {
-        String sql = "SELECT username, score FROM easy_scoreboard";
+        String sql = "SELECT ID,username, score FROM easy_scoreboard";
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
@@ -34,9 +34,9 @@ public class selectDB {
 
             // loop through the result set
             while (rs.next()) {
-                System.out.println(rs.getInt("id") + "\t" +
-                        rs.getString("name") + "\t" +
-                        rs.getDouble("capacity"));
+                System.out.println(rs.getInt("ID") + "\t" +
+                        rs.getString("username") + "\t" +
+                        rs.getDouble("score"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

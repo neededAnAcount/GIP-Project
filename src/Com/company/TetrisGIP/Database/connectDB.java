@@ -15,7 +15,7 @@ public class connectDB {
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:C:\\Users\\timon\\Desktop\\GIP\\Gipcode\\src\\Com\\company\\TetrisGIP\\Database\\scoreboard.db";
+            String url = "jdbc:sqlite:Database:scoreboard.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 

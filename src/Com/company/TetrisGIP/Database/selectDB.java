@@ -11,10 +11,10 @@ public class selectDB {
      */
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:C:\\Users\\timon\\Desktop\\GIP\\Gipcode\\src\\Com\\company\\TetrisGIP\\Database\\scoreboard.db";
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection("jdbc:sqlite::Database:" +
+                    getClass().getResource("/scoreboard.db"));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

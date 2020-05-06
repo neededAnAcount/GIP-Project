@@ -1,5 +1,7 @@
 package Com.company.TetrisGIP;
 
+import Com.company.TetrisGIP.Database.insertDB;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -184,7 +186,7 @@ public class Board2 extends JPanel implements KeyListener {
                         saveHard.setResizable(false);
                         saveHard.setLocationRelativeTo(null);
 
-                        usernameHard = new JTextField("enter player name");
+                        usernameHard = new JTextField();
                         usernameHard.setPreferredSize(new Dimension(370, 40));
                         usernameHard.addFocusListener(new FocusListener() {
                             @Override
@@ -192,6 +194,7 @@ public class Board2 extends JPanel implements KeyListener {
                                 JTextField source = (JTextField) e.getComponent();
                                 source.setText("");
                                 source.removeFocusListener(this);
+
                             }
 
                             @Override
@@ -201,12 +204,20 @@ public class Board2 extends JPanel implements KeyListener {
                             }
                         });
 
-
-                        saveButtonHard = new JButton("Save");
+                        saveButtonHard = new JButton("Save")
+                        ;
+                        saveButtonHard.grabFocus();
                         saveButtonHard.setSize(100, 50);
+                        saveHard.requestFocus();
                         saveButtonHard.addActionListener(e -> {
                             if (saveButtonHard.isEnabled()) {
                                 textFieldValue = usernameHard.getText();
+                                insertDB insertAPP = new insertDB();
+                                insertAPP.insertHard(textFieldValue, getScore());
+                                saveHard.setVisible(false);
+                                paintcomponent3(getGraphics());
+                                Window w = new Window();
+                                w.setVisible(true);
                             }
                         });
 
@@ -219,15 +230,12 @@ public class Board2 extends JPanel implements KeyListener {
                                 paintcomponent3(getGraphics());
                                 Window w = new Window();
                                 w.setVisible(true);
-
                             }
                         });
 
                         saveHard.add(saveButtonHard, gbc);
                         saveHard.add(usernameHard, gbc3);
                         saveHard.add(cancelButton, gbc2);
-                        saveHard.getRootPane().setDefaultButton(saveButtonHard); //source https://stackoverflow.com/questions/8615958/java-gui-how-to-set-focus-on-jbutton-in-jpanel-on-jframe
-                        saveButtonHard.requestFocus();
 
                         saveHard.setVisible(true);
                     }

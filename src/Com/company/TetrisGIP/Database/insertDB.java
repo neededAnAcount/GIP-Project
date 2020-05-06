@@ -14,10 +14,12 @@ public class insertDB {
      */
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:C:\\Users\\timon\\Desktop\\GIP\\Gipcode\\src\\Com\\company\\TetrisGIP\\Database\\scoreboard.db";
+        //String url = "jdbc:sqlite:Database:scoreboard.db";
+
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection("jdbc:sqlite::Database:" +
+                    getClass().getResource("/scoreboard.db"));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -32,6 +34,19 @@ public class insertDB {
      */
     public void insert(String username, double score) {
         String sql = "INSERT INTO easy_scoreboard(username,score) VALUES(?,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setDouble(2, score);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertHard(String username, double score) {
+        String sql = "INSERT INTO hard_scoreboard(username,score) VALUES(?,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

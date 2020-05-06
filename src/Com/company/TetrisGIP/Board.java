@@ -1,5 +1,7 @@
 package Com.company.TetrisGIP;
 
+import Com.company.TetrisGIP.Database.insertDB;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -186,7 +188,7 @@ public class Board extends JPanel implements KeyListener {
                         saveEasy.setResizable(false);
                         saveEasy.setLocationRelativeTo(null);
 
-                        username = new JTextField("enter player name or leave this as is to not save your score");
+                        username = new JTextField();
                         username.setPreferredSize(new Dimension(370, 40));
                         username.addFocusListener(new FocusListener() {
                             @Override
@@ -209,6 +211,12 @@ public class Board extends JPanel implements KeyListener {
                         saveButton.addActionListener(e -> {
                             if (saveButton.isEnabled()) {
                                 textFieldValue = username.getText();
+                                insertDB insertAPP = new insertDB();
+                                insertAPP.insert(textFieldValue, getScore());
+                                saveEasy.setVisible(false);
+                                paintcomponent3(getGraphics());
+                                Window w = new Window();
+                                w.setVisible(true);
                             }
                         });
 
@@ -308,6 +316,10 @@ public class Board extends JPanel implements KeyListener {
     public void addlevel() {
         if (score % 10 == 0)
             level++;
+    }
+
+    public int getScore() {
+        return score;
     }
 }
 

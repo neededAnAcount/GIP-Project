@@ -12,9 +12,9 @@ public class selectDB {
     private Connection connect() {
         // SQLite connection string
         Connection conn = null;
+        String url = "jdbc:sqlite:Database:scoreboard.db";
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite::Database:" +
-                    getClass().getResource("/scoreboard.db"));
+            conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -26,7 +26,7 @@ public class selectDB {
      * select all rows in the warehouses table
      */
     public void selectAll() {
-        String sql = "SELECT ID,username, score FROM easy_scoreboard";
+        String sql = "SELECT ID,username, score FROM hard_scoreboard";
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();

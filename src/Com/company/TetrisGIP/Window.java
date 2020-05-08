@@ -1,6 +1,7 @@
 package Com.company.TetrisGIP;
 
 import Com.company.TetrisGIP.Database.connectDB;
+import Com.company.TetrisGIP.Database.selectDB;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +22,8 @@ public class Window extends JFrame {
     //constructor for the window class
     public Window() {
         connectDB.connect();//test if connected
+        selectDB select = new selectDB();
+        select.selectAll();
 
         window = new JFrame("Main Menu");
         window.setLayout(new GridBagLayout());// puts the buttons in the center and keeps the assigned size also looked this up because the previous thing i tried did not work
@@ -45,7 +48,6 @@ public class Window extends JFrame {
             if (gm1.isEnabled()) {
                 gamemode1 = new JFrame("easy classic tetris");
                 gamemode1.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
-                gamemode1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//closes the application after pressing the red cross
                 gamemode1.setResizable(false);//makes the window size static and not resizable
                 gamemode1.setLocationRelativeTo(null);// opens the window in the middle of the screen
                 board = new Board();
@@ -81,6 +83,22 @@ public class Window extends JFrame {
 
 
         window.add(scoreboard, gbc);
+        scoreboard.addActionListener(e -> {
+            if (gm1.isEnabled()) {
+                // WILL NOT WORK JUST MAKING THIS SO I HAVE IT SO I HAVE IT I DON'T HAVE THE TI%E TO MAKE IT AT THIS MOMENT
+
+
+                gamemode1 = new JFrame("Tetris scoreboard");
+                gamemode1.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
+                gamemode1.setResizable(false);//makes the window size static and not resizable
+                gamemode1.setLocationRelativeTo(null);// opens the window in the middle of the screen
+                board = new Board();
+                gamemode1.add(board);
+                gamemode1.addKeyListener(board);
+                gamemode1.setVisible(true);
+                window.setVisible(false);
+            }
+        });
 
         window.setVisible(true);
     }

@@ -14,12 +14,10 @@ public class insertDB {
      */
     private Connection connect() {
         // SQLite connection string
-        //String url = "jdbc:sqlite:Database:scoreboard.db";
-
+        String url = "jdbc:sqlite:scoreboard.db";
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite::Database:" +
-                    getClass().getResource("/scoreboard.db"));
+            conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

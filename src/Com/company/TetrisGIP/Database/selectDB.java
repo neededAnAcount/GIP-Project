@@ -9,10 +9,10 @@ public class selectDB {
      *
      * @return the Connection object
      */
-    private Connection connect() {
+    public static Connection connect() {
         // SQLite connection string
         Connection conn = null;
-        String url = "jdbc:sqlite:Database:scoreboard.db";
+        String url = "jdbc:sqlite:scoreboard.db";
         try {
             conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
@@ -23,12 +23,12 @@ public class selectDB {
 
 
     /**
-     * select all rows in the warehouses table
+     * select all rows in the hard_scoreboard table
      */
-    public void selectAll() {
-        String sql = "SELECT ID,username, score FROM hard_scoreboard";
+    public static void selectAll() {
+        String sql = "SELECT * FROM hard_scoreboard";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 

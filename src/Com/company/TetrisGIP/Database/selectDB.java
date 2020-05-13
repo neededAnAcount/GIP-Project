@@ -22,10 +22,28 @@ public class selectDB {
     }
 
 
+    public static void selectAllEasy() {
+        String sql = "SELECT * FROM easy_scoreboard";
+
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getInt("ID") + "\t" +
+                        rs.getString("username") + "\t" +
+                        rs.getDouble("score"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /**
      * select all rows in the hard_scoreboard table
      */
-    public static void selectAll() {
+    public static void selectAllHard() {
         String sql = "SELECT * FROM hard_scoreboard";
 
         try (Connection conn = connect();

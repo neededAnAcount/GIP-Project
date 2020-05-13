@@ -23,7 +23,7 @@ public class Window extends JFrame {
     public Window() {
         connectDB.connect();//test if connected
         selectDB select = new selectDB();
-        select.selectAll();
+        selectDB.selectAllHard();
 
         window = new JFrame("Main Menu");
         window.setLayout(new GridBagLayout());// puts the buttons in the center and keeps the assigned size also looked this up because the previous thing i tried did not work

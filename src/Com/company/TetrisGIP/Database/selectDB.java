@@ -23,7 +23,7 @@ public class selectDB {
 
 
     public static void selectAllEasy() {
-        String sql = "SELECT * FROM easy_scoreboard";
+        String sql = "SELECT * FROM easy_scoreboard order by score desc ";
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -44,7 +44,7 @@ public class selectDB {
      * select all rows in the hard_scoreboard table
      */
     public static void selectAllHard() {
-        String sql = "SELECT * FROM hard_scoreboard";
+        String sql = "SELECT * FROM hard_scoreboard order by score desc ";
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();

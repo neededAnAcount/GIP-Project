@@ -7,7 +7,8 @@ import java.sql.SQLException;
 
 public class connectDB {
     /**
-     * Connect to a sample database
+     * connect to the database and see if there is aa database connection
+     * otherwise return a error instead of crashing
      *
      * @return
      */

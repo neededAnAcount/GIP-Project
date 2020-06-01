@@ -7,9 +7,18 @@ import Com.company.TetrisGIP.Database.selectDB;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Window.
+ */
 public class Window extends JFrame {
-    //sets the height and with to be used everywhere in the project and makes the variables unchangeable
-    public static final int WIDTH = 600, HEIGHT = 640;
+    /**
+     * The constant WIDTH.
+     */
+//sets the height and with to be used everywhere in the project and makes the variables unchangeable
+    public static final int WIDTH = 600, /**
+     * The Height.
+     */
+    HEIGHT = 640;
 
     //creates a Jframe object
     private JFrame window;
@@ -23,32 +32,49 @@ public class Window extends JFrame {
     private scoreboardMenu scoreboardMenu;
 
 
-    //constructor for the window class
+    /**
+     * this constuctor will load the main menu for the game
+     * and will load all the settings it needs
+     * and will do a test if the connection to the database is working
+     * if it failed it will give an error message
+     */
     public Window() {
         connectDB.connect();//test if connected
         selectDB.selectAllEasy();
         selectDB.selectAllHard();
 
         window = new JFrame("Main Menu");
-        window.setDefaultCloseOperation(3);//closes the whole program if the main menu is closed
-        window.setLayout(new GridBagLayout());// puts the buttons in the center and keeps the assigned size also looked this up because the previous thing i tried did not work
+        //closes the whole program if the main menu is closed
+        window.setDefaultCloseOperation(3);
+        // puts the buttons in the center and keeps the assigned size
+        window.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 0, 0, 0);
-        window.setSize(WIDTH, HEIGHT); // sets the size of the window using the variables WIDTH and HEIGHT
-        window.setResizable(false);//makes the window size static and not resizable
-        window.setLocationRelativeTo(null);// opens the window in the middle of the screen
-        //make a button
+        // sets the size of the window using the variables WIDTH and HEIGHT
+        window.setSize(WIDTH, HEIGHT);
+        //makes the window size static and not resizable
+        window.setResizable(false);
+        // opens the window in the middle of the screen
+        window.setLocationRelativeTo(null);
+
+        //makes a button and gives it a text
         JButton gm1 = new JButton("easy mode");
+        //set the size for the button
         gm1.setSize(100, 100);
+        //set the position for the button in the center
         gm1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        //make a button
         JButton gm2 = new JButton("hard mode");
         gm2.setSize(100, 100);
         gm2.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton scoreboard = new JButton("Scoreboard");
         scoreboard.setSize(100, 100);
         scoreboard.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
         window.add(gm1, gbc);
         gm1.addActionListener(e -> {
             if (gm1.isEnabled()) {
@@ -98,7 +124,13 @@ public class Window extends JFrame {
     }
 
 
-    // this makes an object of this class
+    /**
+     * makes an object of the class using its constructor
+     * which will load the main menu
+     * and start the program
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         new Window();
     }

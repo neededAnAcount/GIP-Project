@@ -22,6 +22,12 @@ public class selectDB {
     }
 
 
+    /**
+     * this is used to select every entry
+     * in the easy_scoreboard table of the database
+     * and to order the entries by the score from high to low
+     * before outputting the result set
+     */
     public static void selectAllEasy() {
         String sql = "SELECT * FROM easy_scoreboard order by score desc ";
 
@@ -41,7 +47,10 @@ public class selectDB {
     }
 
     /**
-     * select all rows in the hard_scoreboard table
+     * this is used to select every entry
+     * in the hard_scoreboard table of the database
+     * and to order the entries by the score from high to low
+     * before outputting the result set
      */
     public static void selectAllHard() {
         String sql = "SELECT * FROM hard_scoreboard order by score desc ";

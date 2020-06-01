@@ -20,6 +20,16 @@ public class Blocks2 {
     private long time, lasttime;
 
 
+    /**
+     * Instantiates a new Blocks.
+     * and gets all the info
+     * so it knows what to draw and where and which color it has
+     *
+     * @param block  the block
+     * @param coords the coords
+     * @param board  the board
+     * @param color  the color
+     */
     public Blocks2(BufferedImage block, int[][] coords, Board2 board, int color) {
         this.block2 = block;
         this.coords = coords;
@@ -36,7 +46,11 @@ public class Blocks2 {
     }
 
 
-    //update method
+    /**
+     * updates the positioning of the blocks and and the rotation
+     * also checks if a block is placed and if a line is full
+     * and adds score creates a newblock for the player to use and adds a level each time the player has gotten 10 points
+     */
     public void update() {
         moveX = true;
         time += System.currentTimeMillis() - lasttime;
@@ -55,6 +69,8 @@ public class Blocks2 {
             board2.addlevel();
         }
 
+        //checks if the block is at the border of the field in the horizontal width
+        //if the block is block it can't move further
         if (!(x + blockXcoords + coords[0].length > 10) && !(x + blockXcoords < 0)) {
 
             for (int row = 0; row < coords.length; row++) {
@@ -73,6 +89,8 @@ public class Blocks2 {
 
         }
 
+        //checks if the block is at the border of the field in the vertical width
+        //if the block is block it can't move further
         if (!(y + 1 + coords.length > 20)) {
 
             for (int row = 0; row < coords.length; row++) {
@@ -95,7 +113,7 @@ public class Blocks2 {
 
         blockXcoords = 0;
 
-        // FIXME: 20/03/30 this needs to be deleted this is test code to find a good leveling difficulty system
+        //speed system to make each level a bit harder depending on the level of the game
         if (board2.level == 2) {
             normalS = 500;
         } else if (board2.level == 3) {
@@ -111,7 +129,11 @@ public class Blocks2 {
         }
     }
 
-    //render method using graphics g object
+    /**
+     * Renders  the blocks on the board.
+     *
+     * @param g the g
+     */
     public void render(Graphics g) {
 
         for (int row = 0; row < coords.length; row++) {
@@ -124,6 +146,7 @@ public class Blocks2 {
         }
     }
 
+    //checks it the line is full if it is it deletes the line and all the other blocks fall down
     private void linecheck() {
         int height = board2.getBoard().length - 1;
         for (int i = height; i > 0; i--) {
@@ -139,6 +162,12 @@ public class Blocks2 {
         }
     }
 
+    /**
+     * Rotate.
+     * check if the block has a collision somewhere if it hasn't the block can rotate else it can't
+     * if it can it will get the transpose using the coords of the blocks
+     * then it will reverse the matrix using the transpose setting coords of the block the rotatedmatrix coords
+     */
     public void rotate() {
         if (collision) {
             return;
@@ -166,6 +195,7 @@ public class Blocks2 {
 
     }
 
+    // calculates the transpose of the blocks and returns the new matrix which is used by getReversematrix
     private int[][] gettranspose(int[][] matrix) {
         int[][] newMatrix = new int[matrix[0].length][matrix.length];
         for (int i = 0; i < matrix.length; i++) {
@@ -176,6 +206,7 @@ public class Blocks2 {
         return newMatrix;
     }
 
+    //gets the reverse matrix of the blooks using the rotatedmatrix which is the output of the transpose and returns the coords it calcutlated
     private int[][] getReverseMatrix(int[][] matrix) {
         int middle = matrix.length / 2;
         for (int i = 0; i < middle; i++) {
@@ -187,29 +218,56 @@ public class Blocks2 {
 
     }
 
-
+    /**
+     * Sets the current block horizontal coords xcoords whenpressing left and right so the block moves left and right
+     *
+     * @param bXcoords the currentblock horizontalcoords
+     */
     public void setBlockXcoords(int bXcoords) {
 
         this.blockXcoords = bXcoords;
     }
 
-
+    /**
+     * the normal speed of the game used to return the gamespeed
+     * to its standard level after making the blocks fall down faster
+     * <p>
+     * standard speed level is different for each level the player reaches
+     */
     public void NormalS() {
         currents = normalS;
     }
 
+    /**
+     * used to set the game to a faster speed so the player can make blocks fall down faster on the easier level
+     */
     public void speedf() {
         currents = fast;
     }
 
+    /**
+     * used for getting the newblock after the player places its block
+     *
+     * @return the block
+     */
     public BufferedImage getBlock() {
         return block2;
     }
 
+    /**
+     * gets the coords of the newblock so it knows where to draw the blocks
+     *
+     * @return the int [ ] [ ]
+     */
     public int[][] getCoords() {
         return coords;
     }
 
+    /**
+     * Gets the color of the new block and gives it to the new block.
+     *
+     * @return color
+     */
     public int getColor() {
         return color;
     }

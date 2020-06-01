@@ -25,7 +25,9 @@ public class insertDB {
     }
 
     /**
-     * Insert a new row into the warehouses table
+     * used to insert the username of the player
+     * and to insert the score the player got
+     * into the easy_scoreboard tabe of the database
      *
      * @param username
      * @param score
@@ -43,6 +45,14 @@ public class insertDB {
         }
     }
 
+    /**
+     * used to insert the username of the player
+     * and to insert the score the player got
+     * into the Hard_scoreboard tabe of the database
+     *
+     * @param username
+     * @param score
+     */
     public void insertHard(String username, double score) {
         String sql = "INSERT INTO hard_scoreboard(username,score) VALUES(?,?)";
 

@@ -305,11 +305,10 @@ public class Board extends JPanel implements KeyListener {
         return blockSize;
     }
 
-
-    @Override
     /**
      * not used but has to stay here because otherwise i would receive errors
      */
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 
@@ -321,8 +320,6 @@ public class Board extends JPanel implements KeyListener {
         return board;
     }
 
-
-    @Override
     /**
      * this checks if the player pressed one of the keys following keys
      * up down left right arrow keys
@@ -330,6 +327,7 @@ public class Board extends JPanel implements KeyListener {
      * if the player has pressed on of those keys the game will perform
      * the action assigned to the key
      * */
+    @Override
     public void keyPressed(KeyEvent e) {
         //moves block left when pressing the left key
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -353,11 +351,11 @@ public class Board extends JPanel implements KeyListener {
             curentTetrisblock.rotate();
         }
     }
-
-    @Override
+    
     /**
      *     //checks if the down key is still pressed if not the gamespeed is set to to normal speed
      */
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();

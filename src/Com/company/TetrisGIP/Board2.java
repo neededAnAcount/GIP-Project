@@ -5,43 +5,67 @@ import Com.company.TetrisGIP.Database.insertDB;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-
+/**
+ * The Board the game is played on
+ * the keylistener is used to detect input by the user so the player can move the blocks and pause the game.
+ */
 public class Board2 extends JPanel implements KeyListener {
 
-    //set the size of the blocks
-    private final int blockSize = 30;
     //playing area size
     private final int boardWidth = 10, boardheight = 20;
+    //set the size of the blocks
+    private final int blockSize = 30;
+
+
     String textFieldValue = null;
+    /**
+     * The Starting Level for the game.
+     */
     int level = 1;
-    //game is run at 60 frames per second as defined here
+    /**
+     * The Fps of the game is ran at 60 frames per second.
+     */
     int fps = 60;
     //opens a window with all the needed components where the user can enter his or her username and press the button to save the chosen username and score into a sqlite database
     private JFrame saveHard;
     private JTextField usernameHard;
     private JButton saveButtonHard;
     private JButton cancelButton;
+
     //enables images to load in the project
     private BufferedImage blocks2;
-    // define matrix using 2D Arrays
+
+    //defines the  matrix using 2D Arrays and set the size of the matrix using the defined boardheight and boardwidth
     private int[][] board = new int[boardheight][boardWidth];
+
     //Array for all the blocks
     //1 in matrix stands for a block
     //0 in matrix stands for empty space
+    //size of the array is 7 because there are 7pieces the player can get
     private Blocks2[] tetrisblocks = new Blocks2[7];
+
     //defines current tetrisblock that the user is paying with;
     private Blocks2 curentTetrisblock;
+    //starting score
     private int score = 0;
+    //initialize a timer for the painting of the board
     private Timer timer;
+    //set the delay the timer works on
     private int delay = 1000 / fps;
 
-    // constructor for Board class
+    /**
+     * Instantiates a new Board.
+     * for the game to be played on
+     */
     public Board2() {
-        //initialize blocks
+        //initialize blocks and gives it a file to get the subimages from to give the blocks a color
         try {
             blocks2 = ImageIO.read(Board2.class.getResource("/tiles.png"));
         } catch (IOException e) {
@@ -49,33 +73,16 @@ public class Board2 extends JPanel implements KeyListener {
         }
 
         //  Repaints the background back to white when there is no block
-        timer = new Timer(delay, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                update();
-                repaint();
-            }
+        timer = new Timer(delay, e -> {
+            update();
+            repaint();
         });
 
+        //starts the timer
         timer.start();
 
-        /*
-          INFO FOR SUBIMAGE USE
 
-          Returns a subimage defined by a specified rectangular region.
-          The returned {@code BufferedImage} shares the same
-          data array as the original image.
-          @param x the X coordinate of the upper-left corner of the
-         *          specified rectangular region
-         * @param y the Y coordinate of the upper-left corner of the
-         *          specified rectangular region
-         * @param w the width of the specified rectangular region
-         * @param h the height of the specified rectangular region
-         * @return a {@code BufferedImage} that is the subimage of this
-         *          {@code BufferedImage}.
-         * */
-
-        //  initializes the tetrisblocks
+        //  initializes the tetrisblocks and sets it color using the a subimage
         tetrisblocks[0] = new Blocks2(blocks2.getSubimage(0, 0, blockSize, blockSize), new int[][]{
                 {1, 1, 1, 1}// Straight-piece
         }, this, 1);
@@ -114,6 +121,12 @@ public class Board2 extends JPanel implements KeyListener {
         nextblock();
     }
 
+    /**
+     * tells the program to do this
+     * updates the positioning of the blocks and and the rotation
+     * also checks if a block is placed and if a line is full
+     * and adds score creates a newblock for the player to use and adds a level each time the player has gotten 10 points
+     */
     public void update() {
         curentTetrisblock.update();
     }
@@ -129,13 +142,17 @@ public class Board2 extends JPanel implements KeyListener {
                     g.drawImage(blocks2.getSubimage((board[row][col] - 1) * blockSize, 0, blockSize, blockSize),
                             col * blockSize, row * blockSize, null);
 
-
+        //set the color of the text that is deiplayed next to the board
         g.setColor(Color.black);
-
+        //set the font of the text and size
         g.setFont(new Font("Georgia", Font.BOLD, 20));
+        //draw the text "LEVEL" at those coords of the board
         g.drawString("LEVEL", Window.WIDTH - 225, Window.HEIGHT / 2 - 60);
+        //draw the value of the level next to the text "LEVEL"
         g.drawString(String.valueOf(level), Window.WIDTH - 225, Window.HEIGHT / 2 - 30);
+        //draw the text "SCORE" under the text "LEVEL" on the board
         g.drawString("SCORE", Window.WIDTH - 225, Window.HEIGHT / 2);
+        //draw the value of the score the player got next to the text "SCORE"
         g.drawString(score + "", Window.WIDTH - 225, Window.HEIGHT / 2 + 30);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -148,10 +165,8 @@ public class Board2 extends JPanel implements KeyListener {
 
         /*
          *  this piece of code draws the playing area
-         *   the first for loop does this
-         *   renders the horizontal lines
-         *   the second for loop does this
-         *   renders the vertical lines
+         *   the first for loop renders the horizontal lines
+         *   the second for loop renders the vertical lines
          * */
         for (int i = 0; i < boardheight; i++) {
             g.drawLine(0, i * blockSize, boardWidth * blockSize, i * blockSize);
@@ -160,18 +175,26 @@ public class Board2 extends JPanel implements KeyListener {
             g.drawLine(j * blockSize, 0, j * blockSize, boardheight * blockSize);
         }
 
-        // renders the current tetrisblock on the playing field using the render method Located in the Blocks class
-
     }
 
+    /**
+     * this will decide the next block the player
+     * gets after placing a block the nect block is decided randomly
+     * the block also gets assigned its details like color the coords of the blocks
+     * so it will still have the same color after placing the block
+     */
     public void nextblock() {
         int index = (int) (Math.random() * tetrisblocks.length);
         Blocks2 newblock = new Blocks2(tetrisblocks[index].getBlock(), tetrisblocks[index].getCoords(), this, tetrisblocks[index].getColor());
         curentTetrisblock = newblock;
+        //this checks if the player has hit the top of the playing area and if it has it will display the save menu
+        //where the player can enter their username and save their score
         for (int row = 0; row < curentTetrisblock.getCoords().length; row++) {
             for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
+
+
                         // save menu code
                         timer.stop();
                         saveHard = new JFrame("Save score");
@@ -199,8 +222,7 @@ public class Board2 extends JPanel implements KeyListener {
 
                             @Override
                             public void focusLost(FocusEvent e) {
-                                //source for this code that deletes placeholder text
-                                //https://stackoverflow.com/questions/27844313/making-a-jtextfield-with-vanishing-text?rq=1
+
                             }
                         });
 
@@ -244,14 +266,12 @@ public class Board2 extends JPanel implements KeyListener {
         }
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public String getTextFieldValue() {
-        return textFieldValue;
-    }
-
+    /**
+     * Gets the defined block size.
+     * used for calculating the size of the blocks so the blocks fit in the boxes that are drawn using the horizontal and vertical lines
+     *
+     * @return the block size
+     */
     public int getBlockSize() {
         return blockSize;
     }
@@ -262,34 +282,38 @@ public class Board2 extends JPanel implements KeyListener {
         // not used but has to stay here because otherwise i would receive errors and it won't compile without this !!!!!!!
     }
 
+    //this returns the board height and bandwidth
     public int[][] getBoard() {
         return board;
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) //move block left when pressing the left key
-        {
+        //moves block left when pressing the left key
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             curentTetrisblock.setBlockXcoords(-1);
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) //move block right when pressing the right key
-        {
+        }//moves block right when pressing the right key
+        else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             curentTetrisblock.setBlockXcoords(1);
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN)// supposed to move block down faster it works to a degree but the same thing also happens when pressing left and right
-        {
+        }// moves block down faster doesn't work hen pressing right or left at the same time
+        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             curentTetrisblock.speedf();
-        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        } //if player presses the escape button the game is paused
+        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (!timer.isRunning())// if timer.isrunning(false) start timer
                 timer.start();
             else {
-                timer.stop();// else start timer
+                timer.stop(); // else start timer
                 paintcomponent2(getGraphics());
             }
-        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+        }//if the player presses the up button the block rotates
+        else if (e.getKeyCode() == KeyEvent.VK_UP) {
             curentTetrisblock.rotate();
         }
     }
 
     @Override
+    //checks if the down key is still pressed if not the gamespeed is set to to normal speed
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();
@@ -312,15 +336,30 @@ public class Board2 extends JPanel implements KeyListener {
         e.setFont(new Font("Georgia", Font.BOLD, 35));
     }
 
+    /**
+     * this adds a point to the player score each time the player places a block
+     */
     public void addscore() {
         score++;
     }
 
+    /**
+     * this adds a level to the level of the game each time the player has gotten 10 points
+     */
     public void addlevel() {
         if (score % 10 == 0)
             level++;
     }
 
+    /**
+     * this gets the score the player got
+     * this is used to get the score and save it into the database
+     *
+     * @return the score
+     */
+    public int getScore() {
+        return score;
+    }
 }
 
 

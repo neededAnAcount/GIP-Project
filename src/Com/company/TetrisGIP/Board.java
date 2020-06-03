@@ -36,7 +36,7 @@ public class Board extends JPanel implements KeyListener {
     int level = 1;
 
     /**
-     * The Fps of the game is defined at 60 frames per second.
+     * The Fps of the game is ran at 60 frames per second.
      */
     int fps = 60;
 
@@ -72,7 +72,6 @@ public class Board extends JPanel implements KeyListener {
      * Instantiates a new Board.
      * for the game to be played on
      */
-// constructor for Board class
     public Board() {
         //initialize blocks and gives it a file to get the subimages from to give the blocks a color
         try {
@@ -130,7 +129,10 @@ public class Board extends JPanel implements KeyListener {
     }
 
     /**
-     * Update.
+     * tells the program to do this
+     * updates the positioning of the blocks and and the rotation
+     * also checks if a block is placed and if a line is full
+     * and adds score creates a newblock for the player to use and adds a level each time the player has gotten 10 points
      */
     public void update() {
         curentTetrisblock.update();
@@ -149,7 +151,7 @@ public class Board extends JPanel implements KeyListener {
 
         //set the color of the text that is deiplayed next to the board
         g.setColor(Color.black);
-        //set the font of the text
+        //set the font of the text and size
         g.setFont(new Font("Georgia", Font.BOLD, 20));
         //draw the text "LEVEL" at those coords of the board
         g.drawString("LEVEL", Window.WIDTH - 225, Window.HEIGHT / 2 - 60);
@@ -227,8 +229,7 @@ public class Board extends JPanel implements KeyListener {
 
                             @Override
                             public void focusLost(FocusEvent e) {
-                                //source for this code that deletes placeholder text
-                                //https://stackoverflow.com/questions/27844313/making-a-jtextfield-with-vanishing-text?rq=1
+
                             }
                         });
 
@@ -320,7 +321,8 @@ public class Board extends JPanel implements KeyListener {
         }
     }
 
-    @Override//checks if the down key is still pressed if not the gamespeed is set to to normal speed
+    @Override
+    //checks if the down key is still pressed if not the gamespeed is set to to normal speed
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();

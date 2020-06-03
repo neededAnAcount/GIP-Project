@@ -18,9 +18,13 @@ import java.io.IOException;
  */
 public class Board2 extends JPanel implements KeyListener {
 
-    //playing area size
+    /**
+     * the size of the playing area
+     */
     private final int boardWidth = 10, boardheight = 20;
-    //set the size of the blocks
+    /**
+     * the size of the blocks
+     */
     private final int blockSize = 30;
 
 
@@ -39,25 +43,41 @@ public class Board2 extends JPanel implements KeyListener {
     private JButton saveButtonHard;
     private JButton cancelButton;
 
-    //enables images to load in the project
+    /**
+     * enables the use of subimages from one image
+     */
     private BufferedImage blocks2;
 
-    //defines the  matrix using 2D Arrays and set the size of the matrix using the defined boardheight and boardwidth
+    /**
+     * defines the  matrix using 2D Arrays and set the size of the matrix using the defined boardheight and boardwidth
+     */
     private int[][] board = new int[boardheight][boardWidth];
 
-    //Array for all the blocks
-    //1 in matrix stands for a block
-    //0 in matrix stands for empty space
-    //size of the array is 7 because there are 7pieces the player can get
+    /**
+     * Array for all the blocks
+     * 1 in matrix stands for a block
+     * 0 in matrix stands for empty space
+     * size of the array is 7 because there are 7pieces the player can get
+     */
     private Blocks2[] tetrisblocks = new Blocks2[7];
 
-    //defines current tetrisblock that the user is paying with;
+    /**
+     * defines current tetrisblock that the user is paying with;
+     */
     private Blocks2 curentTetrisblock;
-    //starting score
+    /**
+     * starting score
+     */
     private int score = 0;
-    //initialize a timer for the painting of the board
+
+    /**
+     * initialize a timer for the painting of the board
+     */
     private Timer timer;
-    //set the delay the timer works on
+
+    /*
+     * set the delay the timer works on
+     */
     private int delay = 1000 / fps;
 
     /**

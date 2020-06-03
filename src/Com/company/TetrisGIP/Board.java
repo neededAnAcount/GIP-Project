@@ -23,9 +23,13 @@ public class Board extends JPanel implements KeyListener {
      * used to define the height and with of the save menu
      */
     public static final int SAVEWIDTH = 600, SAVEHEIGHT = 400;
-    //set the size of the blocks
+    /**
+     * the size of the blocks
+     */
     private final int blockSize = 30;
-    //playing area size
+    /**
+     * the size of the playing area
+     */
     private final int boardWidth = 10, boardheight = 20;
 
     String textFieldValue = null;
@@ -46,25 +50,39 @@ public class Board extends JPanel implements KeyListener {
     private JButton saveButton;
     private JButton cancelButton;
 
-    //enables images to load in the project
+    /**
+     * enables the use of subimages from one image
+     */
     private BufferedImage blocks;
 
-    //defines the  matrix using 2D Arrays and set the size of the matrix using the defined boardheight and boardwidth
+    /**
+     * defines the  matrix using 2D Arrays and set the size of the matrix using the defined boardheight and boardwidth
+     */
     private int[][] board = new int[boardheight][boardWidth];
 
-    //Array for all the blocks
-    //1 in matrix stands for a block
-    //0 in matrix stands for empty space
-    //size of the array is 7 because there are 7pieces the player can get
+    /**
+     * Array for all the blocks
+     * 1 in matrix stands for a block
+     * 0 in matrix stands for empty space
+     * size of the array is 7 because there are 7pieces the player can get
+     */
     private Blocks[] tetrisblocks = new Blocks[7];
 
-    //defines current tetrisblock that the user is paying with;
+    /**
+     * defines current tetrisblock that the user is paying with;
+     */
     private Blocks curentTetrisblock;
-    //starting score
+    /**
+     * starting score
+     */
     private int score = 0;
-    //initialize a timer for the painting of the board
+    /**
+     * initialize a timer for the painting of the board
+     */
     private Timer timer;
-    //set the delay the timer works on
+    /*
+     * set the delay the timer works on
+     */
     private int delay = 1000 / fps;
 
 

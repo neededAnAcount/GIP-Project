@@ -156,7 +156,10 @@ public class Board extends JPanel implements KeyListener {
         curentTetrisblock.update();
     }
 
-    // enables us to start drowing blocks
+    /**
+     * enables us to start drowing blocks
+     */
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         curentTetrisblock.render(g);
@@ -304,17 +307,29 @@ public class Board extends JPanel implements KeyListener {
 
 
     @Override
+    /**
+     * not used but has to stay here because otherwise i would receive errors
+     */
     public void keyTyped(KeyEvent e) {
-        // not used but has to stay here because otherwise i would receive errors and it won't compile without this !!!!!!!
     }
 
-    //this returns the board height and bandwidth
+
+    /**
+     * returns board width and height
+     */
     public int[][] getBoard() {
         return board;
     }
 
 
     @Override
+    /**
+     * this checks if the player pressed one of the keys following keys
+     * up down left right arrow keys
+     * escape key
+     * if the player has pressed on of those keys the game will perform
+     * the action assigned to the key
+     * */
     public void keyPressed(KeyEvent e) {
         //moves block left when pressing the left key
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -340,7 +355,9 @@ public class Board extends JPanel implements KeyListener {
     }
 
     @Override
-    //checks if the down key is still pressed if not the gamespeed is set to to normal speed
+    /**
+     *     //checks if the down key is still pressed if not the gamespeed is set to to normal speed
+     */
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();

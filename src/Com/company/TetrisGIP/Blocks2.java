@@ -5,10 +5,13 @@ import java.awt.image.BufferedImage;
 
 public class Blocks2 {
 
+    // enables drawing of block
+    private BufferedImage block2;
+    // coordinates of blocks
+    private int[][] coords;
+    // access to playing area
+    private Board2 board2;
 
-    private BufferedImage block2; // enables drawing of block
-    private int[][] coords; // coordinates of blocks
-    private Board2 board2; // access to playing area
     private int blockXcoords = 0;
     private int x, y;
 
@@ -146,7 +149,9 @@ public class Blocks2 {
         }
     }
 
-    //checks it the line is full if it is it deletes the line and all the other blocks fall down
+    /**
+     * checks it the line is full if it is it deletes the line and all the other blocks fall down
+     */
     private void linecheck() {
         int height = board2.getBoard().length - 1;
         for (int i = height; i > 0; i--) {
@@ -163,7 +168,6 @@ public class Blocks2 {
     }
 
     /**
-     * Rotate.
      * check if the block has a collision somewhere if it hasn't the block can rotate else it can't
      * if it can it will get the transpose using the coords of the blocks
      * then it will reverse the matrix using the transpose setting coords of the block the rotatedmatrix coords
@@ -195,7 +199,10 @@ public class Blocks2 {
 
     }
 
-    // calculates the transpose of the blocks and returns the new matrix which is used by getReversematrix
+    /**
+     * calculates the transpose of the blocks
+     * and returns the new matrix which is used by getReversematrix
+     */
     private int[][] gettranspose(int[][] matrix) {
         int[][] newMatrix = new int[matrix[0].length][matrix.length];
         for (int i = 0; i < matrix.length; i++) {
@@ -206,7 +213,11 @@ public class Blocks2 {
         return newMatrix;
     }
 
-    //gets the reverse matrix of the blooks using the rotatedmatrix which is the output of the transpose and returns the coords it calcutlated
+    /**
+     * gets the reverse matrix of theblooks
+     * using the rotatedmatrix which is the output of the transpose
+     * and returns the coords it calcutlated
+     */
     private int[][] getReverseMatrix(int[][] matrix) {
         int middle = matrix.length / 2;
         for (int i = 0; i < middle; i++) {

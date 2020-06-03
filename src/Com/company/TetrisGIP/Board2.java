@@ -296,17 +296,27 @@ public class Board2 extends JPanel implements KeyListener {
         return blockSize;
     }
 
-
+    /**
+     * not used but has to stay here because otherwise i would receive errors
+     */
     @Override
     public void keyTyped(KeyEvent e) {
-        // not used but has to stay here because otherwise i would receive errors and it won't compile without this !!!!!!!
     }
 
-    //this returns the board height and bandwidth
+    /**
+     * returns board width and height
+     */
     public int[][] getBoard() {
         return board;
     }
 
+    /**
+     * this checks if the player pressed one of the keys following keys
+     * up down left right arrow keys
+     * escape key
+     * if the player has pressed on of those keys the game will perform
+     * the action assigned to the key
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         //moves block left when pressing the left key
@@ -332,8 +342,10 @@ public class Board2 extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * //checks if the down key is still pressed if not the gamespeed is set to to normal speed
+     */
     @Override
-    //checks if the down key is still pressed if not the gamespeed is set to to normal speed
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             curentTetrisblock.NormalS();

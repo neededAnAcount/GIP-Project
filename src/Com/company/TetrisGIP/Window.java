@@ -2,7 +2,6 @@ package Com.company.TetrisGIP;
 
 
 import Com.company.TetrisGIP.Database.connectDB;
-import Com.company.TetrisGIP.Database.selectDB;
 
 import javax.swing.*;
 import java.awt.*;

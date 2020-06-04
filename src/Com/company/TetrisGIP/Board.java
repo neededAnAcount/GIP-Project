@@ -351,9 +351,9 @@ public class Board extends JPanel implements KeyListener {
             curentTetrisblock.rotate();
         }
     }
-    
+
     /**
-     *     //checks if the down key is still pressed if not the gamespeed is set to to normal speed
+     * checks if the down key is still pressed if not the gamespeed is set to to normal speed
      */
     @Override
     public void keyReleased(KeyEvent e) {

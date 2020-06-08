@@ -3,6 +3,9 @@ package Com.company.TetrisGIP;
 import Com.company.TetrisGIP.Database.insertDB;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -10,7 +13,10 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
 
 
 /**
@@ -18,6 +24,41 @@ import java.io.IOException;
  * the keylistener is used to detect input by the user so the player can move the blocks and pause the game.
  */
 public class Board extends JPanel implements KeyListener {
+
+
+    String[] songs = {"jetbrains://idea/navigate/reference?project=Gipcode&path=12 -Eternity Memories of Lightwaves-FFX-2 Piano Collections.mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Child of Light - Steamwork for Orchestra.mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Doom Theme - At Doom's Gate (Epic Piano Toccata).mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Final Fantasy X OST To Zanarkand.mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Final Fantasy XV OST - Somnus (Instrumental Version).mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Gerudo Valley (Piano Cover) - The Legend of Zelda Ocarina of Time.mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=HIKARI (2016 Piano & String Version) - Kingdom Hearts - by Sam Yung.mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Kingdom Hearts - Dearly Beloved Piano (Journeys End Edition).mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Kingdom Hearts II Soundtrack - Destiny Islands.mp3",
+            "jetbrains://idea/navigate/reference?project=Gipcode&path=Kingdom Hearts 3582 days Xions Theme (With Download Link).mp3"};
+
+
+    //Get random filepath from the array
+    Random rand = new Random();
+    int random = rand.nextInt(songs.length);
+    String temp = songs[random];
+
+    public static void playMusic(String filepath) {
+        InputStream music;
+        try {
+            File musicpath = new File(filepath);
+            if (musicpath.exists()) {
+                AudioInputStream audioinput = AudioSystem.getAudioInputStream(musicpath);
+                Clip clip = AudioSystem.getClip();
+                clip.start();
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     /**
      * The constant SAVEWIDTH and SAVEHEIGHT
      * used to define the height and with of the save menu
@@ -95,14 +136,6 @@ public class Board extends JPanel implements KeyListener {
         try {
             if (level == 1) {
                 blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
-            } else if (level == 2) {
-                blocks = ImageIO.read(Board.class.getResource("/tiles2.png"));
-            } else if (level == 3) {
-                blocks = ImageIO.read(Board.class.getResource("/tiles3.png"));
-            } else if (level == 4) {
-                blocks = ImageIO.read(Board.class.getResource("/tiles4.png"));
-            } else if (level == 5) {
-                blocks = ImageIO.read(Board.class.getResource("/tiles5.png"));
             }
         } catch (IOException e) {
             e.printStackTrace();

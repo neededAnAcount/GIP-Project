@@ -93,7 +93,17 @@ public class Board extends JPanel implements KeyListener {
     public Board() {
         //initialize blocks and gives it a file to get the subimages from to give the blocks a color
         try {
-            blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
+            if (level == 1) {
+                blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
+            } else if (level == 2) {
+                blocks = ImageIO.read(Board.class.getResource("/tiles2.png"));
+            } else if (level == 3) {
+                blocks = ImageIO.read(Board.class.getResource("/tiles3.png"));
+            } else if (level == 4) {
+                blocks = ImageIO.read(Board.class.getResource("/tiles4.png"));
+            } else if (level == 5) {
+                blocks = ImageIO.read(Board.class.getResource("/tiles5.png"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

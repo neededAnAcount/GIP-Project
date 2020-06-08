@@ -13,6 +13,7 @@ import static Com.company.TetrisGIP.selectDB.connect;
 public class scoreboardMenu extends JPanel {
     private JFrame frame;
     private JLabel info;
+    private JLabel infoJtable;
     private JButton scoreboardEasy;
     private JButton scoreboardHard;
     private JButton cancelButton;
@@ -67,7 +68,6 @@ public class scoreboardMenu extends JPanel {
                         String usernameEasy = rs.getString("username");
                         String scoreEasy = rs.getString("score");
                         model.addRow(new Object[]{usernameEasy, scoreEasy});
-                        System.out.println("this works");
                     }
                 } catch (SQLException a) {
                     System.out.println(a.getMessage());
@@ -76,7 +76,9 @@ public class scoreboardMenu extends JPanel {
                 JTable TableEasy = new JTable();
                 JScrollPane spTable = new JScrollPane(TableEasy);
                 TableEasy.setModel(model);
-                frame.add(spTable);
+                infoJtable = new JLabel("close this menu frame to go back to the main menu");
+                frame.add(infoJtable, gbc);
+                frame.add(spTable, gbc);
                 frame.revalidate();
                 frame.repaint();
 
@@ -117,7 +119,9 @@ public class scoreboardMenu extends JPanel {
                 JTable TableHard = new JTable();
                 JScrollPane spTable = new JScrollPane(TableHard);
                 TableHard.setModel(model);
-                frame.add(spTable);
+                infoJtable = new JLabel("close this menu frame to go back to the main menu");
+                frame.add(infoJtable, gbc);
+                frame.add(spTable, gbc);
                 frame.revalidate();
                 frame.repaint();
             }

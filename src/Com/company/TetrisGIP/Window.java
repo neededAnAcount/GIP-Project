@@ -39,8 +39,7 @@ public class Window extends JFrame {
      */
     public Window() {
         connectDB.connect();//test if connected
-        selectDB.selectAllEasy();
-        selectDB.selectAllHard();
+
 
         window = new JFrame("Main Menu");
         //closes the whole program if the main menu is closed

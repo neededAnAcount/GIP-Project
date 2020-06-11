@@ -3,9 +3,7 @@ package Com.company.TetrisGIP;
 import Com.company.TetrisGIP.Database.insertDB;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -15,7 +13,6 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 
@@ -24,38 +21,76 @@ import java.util.Random;
  * the keylistener is used to detect input by the user so the player can move the blocks and pause the game.
  */
 public class Board extends JPanel implements KeyListener {
+    static String[] songs = {"Textures/HIKARI-_2016-Piano-_-String-Version_-Kingdom-Hearts-by-Sam-Yung.wav",
+            "Textures/Gerudo-Valley-_Piano-Cover_-The-Legend-of-Zelda-Ocarina-of-Time.wav",
+            "Textures/Kingdom-Hearts-3582-days-Xions-Theme-_With-Download-Link_.wav",
+            "Textures/Kingdom-Hearts-Dearly-Beloved-Piano-_Journeys-End-Edition_.wav"};
+    boolean gamePaused = false;
+    private Clip clip;
 
 
-    String[] songs = {"jetbrains://idea/navigate/reference?project=Gipcode&path=12 -Eternity Memories of Lightwaves-FFX-2 Piano Collections.mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Child of Light - Steamwork for Orchestra.mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Doom Theme - At Doom's Gate (Epic Piano Toccata).mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Final Fantasy X OST To Zanarkand.mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Final Fantasy XV OST - Somnus (Instrumental Version).mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Gerudo Valley (Piano Cover) - The Legend of Zelda Ocarina of Time.mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=HIKARI (2016 Piano & String Version) - Kingdom Hearts - by Sam Yung.mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Kingdom Hearts - Dearly Beloved Piano (Journeys End Edition).mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Kingdom Hearts II Soundtrack - Destiny Islands.mp3",
-            "jetbrains://idea/navigate/reference?project=Gipcode&path=Kingdom Hearts 3582 days Xions Theme (With Download Link).mp3"};
-
-
-    //Get random filepath from the array
-    Random rand = new Random();
-    int random = rand.nextInt(songs.length);
-    String temp = songs[random];
-
-    public static void playMusic(String filepath) {
-        InputStream music;
+    /**
+     * Instantiates a new Board.
+     * for the game to be played on
+     */
+    public Board() {
+        playMusic();
+        //initialize blocks and gives it a file to get the subimages from to give the blocks a color
         try {
-            File musicpath = new File(filepath);
-            if (musicpath.exists()) {
-                AudioInputStream audioinput = AudioSystem.getAudioInputStream(musicpath);
-                Clip clip = AudioSystem.getClip();
-                clip.start();
+            if (level == 1) {
+                blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
             }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        //  Repaints the background back to white when there is no block
+        timer = new Timer(delay, e -> {
+            update();
+            repaint();
+
+        });
+
+        //starts the timer
+        timer.start();
+
+        //  initializes the tetrisblocks and sets it color using the a subimage
+        tetrisblocks[0] = new Blocks(blocks.getSubimage(0, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1, 1}// Straight-piece
+        }, this, 1);
+
+        tetrisblocks[1] = new Blocks(blocks.getSubimage(blockSize, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 0},
+                {0, 1, 1}// Z-piece
+        }, this, 2);
+
+        tetrisblocks[2] = new Blocks(blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), new int[][]{
+                {0, 1, 1},
+                {1, 1, 0}// S-piece
+        }, this, 3);
+
+        tetrisblocks[3] = new Blocks(blocks.getSubimage(blockSize * 3, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1},
+                {0, 1, 0}// T-piece
+        }, this, 4);
+
+        tetrisblocks[4] = new Blocks(blocks.getSubimage(blockSize * 4, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1},
+                {0, 0, 1}// J-piece
+        }, this, 5);
+
+        tetrisblocks[5] = new Blocks(blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), new int[][]{
+                {1, 1, 1},
+                {1, 0, 0}// L-piece
+        }, this, 6);
+
+        tetrisblocks[6] = new Blocks(blocks.getSubimage(blockSize * 6, 0, blockSize, blockSize), new int[][]{
+                {1, 1},
+                {1, 1}// O-piece
+        }, this, 7);
+
+        // current block in use
+        nextblock();
     }
 
 
@@ -126,67 +161,40 @@ public class Board extends JPanel implements KeyListener {
      */
     private int delay = 1000 / fps;
 
-
-    /**
-     * Instantiates a new Board.
-     * for the game to be played on
-     */
-    public Board() {
-        //initialize blocks and gives it a file to get the subimages from to give the blocks a color
+    public void playMusic() {
+        //Get random filepath from the array
+        Random rand = new Random();
+        int random = rand.nextInt(songs.length);
+        String temp = songs[random];
+        System.out.println(temp);
         try {
-            if (level == 1) {
-                blocks = ImageIO.read(Board.class.getResource("/tiles.png"));
+            File musicpath = new File(temp);
+
+            AudioInputStream audioinput = AudioSystem.getAudioInputStream(musicpath);
+            clip = AudioSystem.getClip();
+            this.clip = clip;
+            clip.open(audioinput);
+            clip.start();
+            LineListener listener = new LineListener() {
+                public void update(LineEvent event) {
+                    if (event.getType() == LineEvent.Type.START) {
+                        /*
+                         * here you are sure the clip is started
+                         */
+                    }
+                }
+            };
+            clip.addLineListener(listener);
+            System.out.println("play music");
+            System.out.println(clip.isActive());
+            if (gamePaused) {
+                clip.stop();
+                System.out.println(clip.isActive());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-        //  Repaints the background back to white when there is no block
-        timer = new Timer(delay, e -> {
-            update();
-            repaint();
-        });
-
-        //starts the timer
-        timer.start();
-
-        //  initializes the tetrisblocks and sets it color using the a subimage
-        tetrisblocks[0] = new Blocks(blocks.getSubimage(0, 0, blockSize, blockSize), new int[][]{
-                {1, 1, 1, 1}// Straight-piece
-        }, this, 1);
-
-        tetrisblocks[1] = new Blocks(blocks.getSubimage(blockSize, 0, blockSize, blockSize), new int[][]{
-                {1, 1, 0},
-                {0, 1, 1}// Z-piece
-        }, this, 2);
-
-        tetrisblocks[2] = new Blocks(blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), new int[][]{
-                {0, 1, 1},
-                {1, 1, 0}// S-piece
-        }, this, 3);
-
-        tetrisblocks[3] = new Blocks(blocks.getSubimage(blockSize * 3, 0, blockSize, blockSize), new int[][]{
-                {1, 1, 1},
-                {0, 1, 0}// T-piece
-        }, this, 4);
-
-        tetrisblocks[4] = new Blocks(blocks.getSubimage(blockSize * 4, 0, blockSize, blockSize), new int[][]{
-                {1, 1, 1},
-                {0, 0, 1}// J-piece
-        }, this, 5);
-
-        tetrisblocks[5] = new Blocks(blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), new int[][]{
-                {1, 1, 1},
-                {1, 0, 0}// L-piece
-        }, this, 6);
-
-        tetrisblocks[6] = new Blocks(blocks.getSubimage(blockSize * 6, 0, blockSize, blockSize), new int[][]{
-                {1, 1},
-                {1, 1}// O-piece
-        }, this, 7);
-
-        // current block in use
-        nextblock();
     }
 
     /**
@@ -265,8 +273,8 @@ public class Board extends JPanel implements KeyListener {
             for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
-
-
+                        clip.stop();
+                        clip.close();
                         //save menu code
                         timer.stop();
                         saveEasy = new JFrame("Save score");
@@ -383,12 +391,15 @@ public class Board extends JPanel implements KeyListener {
             curentTetrisblock.speedf();
         } //if player presses the escape button the game is paused
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (!timer.isRunning())// if timer.isrunning(false) start timer
+            if (!timer.isRunning()) {// if timer.isrunning(false) start timer
                 timer.start();
-            else {
+                clip.start();
+            } else {
                 timer.stop(); // else start timer
+                clip.stop();
                 paintcomponent2(getGraphics());
             }
+
         }//if the player presses the up button the block rotates
         else if (e.getKeyCode() == KeyEvent.VK_UP) {
             curentTetrisblock.rotate();

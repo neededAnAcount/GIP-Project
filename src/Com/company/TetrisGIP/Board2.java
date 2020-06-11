@@ -3,6 +3,7 @@ package Com.company.TetrisGIP;
 import Com.company.TetrisGIP.Database.insertDB;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -10,14 +11,57 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * The Board the game is played on
  * the keylistener is used to detect input by the user so the player can move the blocks and pause the game.
  */
 public class Board2 extends JPanel implements KeyListener {
+    static String[] songs = {"Textures/HIKARI-_2016-Piano-_-String-Version_-Kingdom-Hearts-by-Sam-Yung.wav",
+            "Textures/Gerudo-Valley-_Piano-Cover_-The-Legend-of-Zelda-Ocarina-of-Time.wav",
+            "Textures/Kingdom-Hearts-3582-days-Xions-Theme-_With-Download-Link_.wav",
+            "Textures/Kingdom-Hearts-Dearly-Beloved-Piano-_Journeys-End-Edition_.wav"};
+    boolean gamePaused = false;
+    private Clip clip;
 
+    public void playMusic() {
+        //Get random filepath from the array
+        Random rand = new Random();
+        int random = rand.nextInt(songs.length);
+        String temp = songs[random];
+        System.out.println(temp);
+        try {
+            File musicpath = new File(temp);
+
+            AudioInputStream audioinput = AudioSystem.getAudioInputStream(musicpath);
+            clip = AudioSystem.getClip();
+            this.clip = clip;
+            clip.open(audioinput);
+            clip.start();
+            LineListener listener = new LineListener() {
+                public void update(LineEvent event) {
+                    if (event.getType() == LineEvent.Type.START) {
+                        /*
+                         * here you are sure the clip is started
+                         */
+                    }
+                }
+            };
+            clip.addLineListener(listener);
+            System.out.println("play music");
+            System.out.println(clip.isActive());
+            if (gamePaused) {
+                clip.stop();
+                System.out.println(clip.isActive());
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     /**
      * the size of the playing area
      */
@@ -214,7 +258,8 @@ public class Board2 extends JPanel implements KeyListener {
             for (int col = 0; col < curentTetrisblock.getCoords()[row].length; col++) {
                 if (curentTetrisblock.getCoords()[row][col] != 0) {
                     if (board[row][col + 3] != 0) {
-
+                        clip.stop();
+                        clip.close();
 
                         // save menu code
                         timer.stop();
@@ -331,10 +376,12 @@ public class Board2 extends JPanel implements KeyListener {
             curentTetrisblock.speedf();
         } //if player presses the escape button the game is paused
         else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (!timer.isRunning())// if timer.isrunning(false) start timer
+            if (!timer.isRunning()) {// if timer.isrunning(false) start timer
                 timer.start();
-            else {
+                clip.start();
+            } else {
                 timer.stop(); // else start timer
+                clip.stop();
                 paintcomponent2(getGraphics());
             }
         }//if the player presses the up button the block rotates

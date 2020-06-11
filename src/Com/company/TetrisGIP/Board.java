@@ -24,7 +24,9 @@ public class Board extends JPanel implements KeyListener {
     static String[] songs = {"Textures/HIKARI-_2016-Piano-_-String-Version_-Kingdom-Hearts-by-Sam-Yung.wav",
             "Textures/Gerudo-Valley-_Piano-Cover_-The-Legend-of-Zelda-Ocarina-of-Time.wav",
             "Textures/Kingdom-Hearts-3582-days-Xions-Theme-_With-Download-Link_.wav",
-            "Textures/Kingdom-Hearts-Dearly-Beloved-Piano-_Journeys-End-Edition_.wav"};
+            "Textures/Kingdom-Hearts-Dearly-Beloved-Piano-_Journeys-End-Edition_.wav",
+            "Textures/Kingdom-Hearts-II-Soundtrack-Destiny-Islands.wav",
+            "Textures/Nancy-Drew-The-Silent-Spy-Kate-Theme.wav"};
     boolean gamePaused = false;
     private Clip clip;
 

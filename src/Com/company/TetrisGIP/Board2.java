@@ -29,41 +29,7 @@ public class Board2 extends JPanel implements KeyListener {
     boolean gamePaused = false;
     private Clip clip;
 
-    public void playMusic() {
-        //Get random filepath from the array
-        Random rand = new Random();
-        int random = rand.nextInt(songs.length);
-        String temp = songs[random];
-        System.out.println(temp);
-        try {
-            File musicpath = new File(temp);
 
-            AudioInputStream audioinput = AudioSystem.getAudioInputStream(musicpath);
-            clip = AudioSystem.getClip();
-            this.clip = clip;
-            clip.open(audioinput);
-            clip.start();
-            LineListener listener = new LineListener() {
-                public void update(LineEvent event) {
-                    if (event.getType() == LineEvent.Type.START) {
-                        /*
-                         * here you are sure the clip is started
-                         */
-                    }
-                }
-            };
-            clip.addLineListener(listener);
-            System.out.println("play music");
-            System.out.println(clip.isActive());
-            if (gamePaused) {
-                clip.stop();
-                System.out.println(clip.isActive());
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
     /**
      * the size of the playing area
      */
@@ -126,11 +92,13 @@ public class Board2 extends JPanel implements KeyListener {
      */
     private int delay = 1000 / fps;
 
+
     /**
      * Instantiates a new Board.
      * for the game to be played on
      */
     public Board2() {
+        playMusic();
         //initialize blocks and gives it a file to get the subimages from to give the blocks a color
         try {
             blocks2 = ImageIO.read(Board2.class.getResource("/tiles.png"));
@@ -186,6 +154,42 @@ public class Board2 extends JPanel implements KeyListener {
 
         // current block in use
         nextblock();
+    }
+
+    public void playMusic() {
+        //Get random filepath from the array
+        Random rand = new Random();
+        int random = rand.nextInt(songs.length);
+        String temp = songs[random];
+        System.out.println(temp);
+        try {
+            File musicpath = new File(temp);
+
+            AudioInputStream audioinput = AudioSystem.getAudioInputStream(musicpath);
+            clip = AudioSystem.getClip();
+            this.clip = clip;
+            clip.open(audioinput);
+            clip.start();
+            LineListener listener = new LineListener() {
+                public void update(LineEvent event) {
+                    if (event.getType() == LineEvent.Type.START) {
+                        /*
+                         * here you are sure the clip is started
+                         */
+                    }
+                }
+            };
+            clip.addLineListener(listener);
+            System.out.println("play music");
+            System.out.println(clip.isActive());
+            if (gamePaused) {
+                clip.stop();
+                System.out.println(clip.isActive());
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
